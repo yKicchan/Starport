@@ -1,0 +1,88 @@
+@media(max-width: 480px){
+    .header-genre{
+        padding-bottom: 13px;
+    }
+    .profile-wrapper{
+        width: 100%;
+        height:112px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        display: inline-block;
+        text-align: center;
+    }
+    .profile-content{
+        height: 98px;
+        background-color: white;
+        border-radius: 6px;
+        box-shadow:0px 3px 4px -2px #7d7d7d;
+        -moz-box-shadow:0px 3px 4px -2px #7d7d7d;
+        -webkit-box-shadow:0px 3px 4px -2px #7d7d7d;
+        display: inline-block;
+        text-align: left;
+    }
+    .profile-images {
+        width: 48px;
+        height: 48px;
+        position: absolute;
+        top: 41px;
+        left: 1px;
+    }
+    .profile-images img {
+        position: absolute;
+        width: auto;
+        height: 100%;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+    }
+    .background-images {
+        width: 118px;
+        height: 90px;
+        border-radius: 6px;
+        margin: 4px;
+    }
+    .background-images img {
+        position: absolute;
+        width: auto;
+        height: 100%;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+    }
+    .profile-text{
+        height: 100px;
+        width: 170px;
+        margin: -99px 0px 0px 118px;
+        padding: 6px;
+        position: absolute;
+    }
+    .lesson-about{
+        margin-top: 4px !important;
+        margin-left: 2px !important;
+        margin-bottom: 1px !important;
+        height: 4em;
+        line-height: 1.4em !important;
+        word-wrap: break-word;
+    }
+    .separator{
+        border-top: 1px solid #888;
+        margin-top: 2px;
+        margin-bottom: 1px;
+    }
+    .lesson-university{
+        font-size: 10px !important;
+        text-align: end;
+    }
+}

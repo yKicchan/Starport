@@ -1,0 +1,12 @@
+.list_pagenavi {
+  margin: 0;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  font-size: 18px;
+  background-color: white;
+  border: solid 1px #aaaaaa;
+}
+
+#weekly_schedule {
+  font-size: 16px;
+}

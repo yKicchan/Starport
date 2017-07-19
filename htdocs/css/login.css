@@ -1,0 +1,27 @@
+.login {
+  background-image: url('<?php echo home_url();?>/wp-content/uploads/2016/05/140823_ESSCardiff_Day2_081.jpg');
+}
+
+#login  {
+    color: white;
+}
+
+#loginform {
+  background-color: Transparent;
+}
+
+#loginform label {
+  color: white;
+}
+
+#login #nav {
+  opacity: 0.93;
+  border-radius: 10px;
+  background-color: white;
+}
+
+#login #backtoblog {
+  opacity: 0.93;
+  border-radius: 10px;
+  background-color: white;
+}

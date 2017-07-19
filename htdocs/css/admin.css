@@ -1,0 +1,122 @@
+#content-html {
+    display: none;
+}
+
+#content-tmce {
+    display: none;
+}
+
+#edit-slug-box {
+    display: none;
+}
+
+.page-title-action {
+    display: none;
+}
+
+.wp-submenu {
+    display: none;
+}
+
+.subsubsub {
+    display: none;
+}
+
+#menu-dashboard {
+    display: none;
+}
+
+.tablenav {
+    display: none;
+}
+
+.search-box {
+    display: none;
+}
+
+#show-settings-link {
+    display: none;
+}
+
+#wp-admin-bar-new-content {
+    display: none;
+}
+
+.misc-pub-post-status {
+    display: none;
+}
+
+.misc-pub-section {
+    display: none;
+}
+
+#slugdiv {
+    display: none;
+}
+
+#menu-media {
+    display: none;
+}
+
+.copy_to_template {
+    display: none;
+}
+
+/* 画像 
+.media-toolbar {
+    display: none;
+}
+*/
+
+.attachments-browser {
+    display: none;
+}
+
+.media-router .active {
+    display: none;
+}
+
+/* プロフィール */
+.user-profile-picture {
+    display: none;
+}
+
+.user-url-wrap {
+    display: none;
+}
+
+.user-user_address-wrap {
+    display: none;
+}
+
+.user-user_phone-wrap {
+    display: none;
+}
+
+#your-profile h2 {
+    display: none;
+}
+
+#your-profile h3 {
+    display: none;
+}
+
+.user-sessions-wrap {
+    display: none;
+}
+
+.show-admin-bar {
+    display: none;
+}
+
+.user-description-wrap p {
+    display: none;
+}
+
+#footer-thankyou {
+    display: none;
+}
+
+#contextual-help-link {
+    display: none;
+}
