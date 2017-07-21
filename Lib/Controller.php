@@ -176,7 +176,7 @@ abstract class Controller
      *
      * @return void
      */
-    public function notFound() { $this->loadView($this->notFoundPath); }
+    public function notFound() { $this->disp($this->notFoundPath); }
 
     /**
      * HTML特殊文字のエスケープ処理
