@@ -1,7 +1,7 @@
 <?php
 /**
  * レッスン情報に関するページの処理を行うクラス
- *
+ * 
  * @package     starport
  * @subpackage  Controllers
  * @author      yKicchan
@@ -28,7 +28,7 @@ class LessonController extends AppController
         // Viewと共有するデータをセット
         $this->set('lesson', $lesson);
         $this->set('user', $user);
-        $this->set('isContacted', $model->isContacted());
+        $this->set('isContacted', $model->isContacted($lesson['id'], $user['facebook_id']));
 
         // レッスン詳細ページ表示
         $this->disp('/Lesson/lessonpage.php');
@@ -215,7 +215,7 @@ class LessonController extends AppController
             } else if (!isset($post['lesson_genre']) || $post['lesson_genre'] == '-1') {
                 throw new RuntimeException('ジャンルを選択してください！');
 
-                // ファイルの選択チェック
+            // ファイルの選択チェック
             } else if (!isset($post['lesson_image'])) {
                 throw new RuntimeException('カバー画像を選択してください！');
             }
@@ -230,6 +230,7 @@ class LessonController extends AppController
 
     /**
      * レッスンのコンタクト申請
+     *
      * @return void
      */
     public function contactAction()
@@ -280,10 +281,9 @@ Starport運営チーム
 お問合せ: http://{$_SERVER['HTTP_HOST']}/info/contact
 --------------------------------------------
 EOT;
-            // メール送信
-            (new Mail($to, $subject, $body))->send_mail();
-            "<h2>{$recever['user']['name']}さんにメールが送信されました！</h2>" .
-            "<p>{$recever['user']['name']}さんからFacebookで連絡が来るのを待っていてください。</p>";
-        }
+        // メール送信
+        (new Mail($to, $subject, $body))->send_mail();
+        "<h2>{$recever['user']['name']}さんにメールが送信されました！</h2>" .
+        "<p>{$recever['user']['name']}さんからFacebookで連絡が来るのを待っていてください。</p>";
     }
 }
