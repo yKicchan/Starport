@@ -164,14 +164,6 @@ abstract class Model
     public abstract function update($id, $data);
 
     /**
-     * IDと一致したレコードを返すメソッド
-     *
-     * @param  integer $id 行を特定する一意なID
-     * @return array       レコード
-     */
-    public abstract function get($id);
-
-    /**
      * すべてのレコードを抽出するメソッド
      *
      * @return array 全レコード

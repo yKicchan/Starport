@@ -53,17 +53,4 @@ class AppModel extends Model
         return $this->query($sql);
     }
 
-    /**
-     * IDと一致したレコードを返すメソッド
-     *
-     * @param  integer $id 行を特定する一意なID
-     * @return array       レコード
-     */
-    public function get($id)
-    {
-        $sql = "SELECT * FROM $tableName WHERE id = $id";
-        $row = $this->query($sql);
-        return $row[0];
-    }
-
 }
