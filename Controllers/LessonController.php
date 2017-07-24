@@ -143,8 +143,9 @@ class LessonController extends AppController
         }
 
         // 入力内容をエスケープ
-        $post['lesson_name']  = mysqli_real_escape_string(Controller::escape($post['lesson_name']));
-        $post['lesson_about'] = mysqli_real_escape_string(Controller::escape($post['lesson_about']));
+        $model = new Lesson();
+        $post['lesson_name']  = $model->escape(h($post['lesson_name']));
+        $post['lesson_about'] = $model->escape(h($post['lesson_about']));
         $post['lesson_genre'] = $post['lesson_genre'];
 
         // 改行コードを改行タグに変換
@@ -153,7 +154,7 @@ class LessonController extends AppController
 
         // 選択された画像が最後にアップロードされたものでない時
         if (isset($_SESSION['fileName']) && $post['lesson_image'] != $_SESSION['fileName']) {
-            if (!(new Lesson())->isUsedImage($_SESSION['fileName'])) {
+            if (!$model->isUsedImage($_SESSION['fileName'])) {
                 // 残っている使われない画像を削除
                 echo "<pre>" . var_dump($_SESSION['fileName']) . '/' . $post['fileName'] . "</pre>";
                 unlink($this->getSysRoot() . "/htdocs/uploads/{$_SESSION['user_id']}/{$_SESSION['fileName']}");
@@ -174,7 +175,7 @@ class LessonController extends AppController
                       'user_id'    => $_SESSION['user_id']);
 
         // 登録実行
-        if((new Lesson)->insert($data)) {
+        if($model->insert($data)) {
 
             // 登録成功した時、セッションの保存内容をリセット
             unset($_SESSION['lesson_name']);
