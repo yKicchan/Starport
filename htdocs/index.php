@@ -31,20 +31,18 @@ spl_autoload_register(function ($class) {
     include_once $class . '.php';
 });
 
-// 各オブジェクトのインスタンス化
-$model = new AppModel();
-$controller = new AppController();
-$dispatcher = new Dispatcher();
-
-// システムのルートディレクトリの設定
-$dispatcher->setSysRoot(ROOT_PATH . '/starport');
+function h($value)
+{
+    return trim(htmlspecialchars($value, ENT_QUOTES, 'UTF-8'));
+}
 
 // リクエスト振り分け
+$dispatcher = new Dispatcher();
+$dispatcher->setSysRoot(ROOT_PATH . '/starport');
 try {
     $dispatcher->dispatch();
 } catch (Exception $e) {
+    header("HTTP/1.0 404 Not Found");
+    $controller = new AppController();
     $controller->notFound();
-} finally {
-    // DB接続切断
-    $model->closeMysqli();
 }

@@ -29,7 +29,7 @@ class AppController extends Controller
     {
         parent::__construct();
         $this->setViewDir('/Views');
-        $this->setNotFoundPath('/404.php');
+        $this->setNotFoundPath('/Error/404.php');
 
         $genre = (new Genre())->getAll();
         $contentObj = new Content();
@@ -55,14 +55,14 @@ class AppController extends Controller
 
         $exceptionPages = array('top'   => '/toppage.php',
                                 'genre' => '/Lesson/genrepage.php');
-        require_once '/var/www/html/starport' . '/Views/header.php';
+        require_once '../Views/header.php';
         if(array_search($fileName, $exceptionPages) !== false){
-            require_once '/var/www/html/starport' . '/Views' . $fileName;
+            require_once '../Views' . $fileName;
         }else{
-            require_once '/var/www/html/starport' . '/Views/header-genres.php';
-            require_once '/var/www/html/starport' . '/Views' . $fileName;
+            require_once '../Views/header-genres.php';
+            require_once '../Views' . $fileName;
         }
-        require_once '/var/www/html/starport' . '/Views/footer.php';
+        require_once '../Views/footer.php';
     }
 
     /**
