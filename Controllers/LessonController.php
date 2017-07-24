@@ -1,7 +1,7 @@
 <?php
 /**
  * レッスン情報に関するページの処理を行うクラス
- * 
+ *
  * @package     starport
  * @subpackage  Controllers
  * @author      yKicchan
@@ -28,7 +28,7 @@ class LessonController extends AppController
         // Viewと共有するデータをセット
         $this->set('lesson', $lesson);
         $this->set('user', $user);
-        $this->set('isContacted', $model->isContacted($lesson['id'], $user['facebook_id']));
+        $this->set('isContacted', $model->isContacted($lesson['id'], $_SESSION['user_id']));
 
         // レッスン詳細ページ表示
         $this->disp('/Lesson/lessonpage.php');
@@ -68,7 +68,7 @@ class LessonController extends AppController
         // Viewと共有するデータをセット
         $this->set('lesson', $lesson);
         $this->set('user', $user);
-        $this->set('param', $param);
+        $this->set('subject', $param);
 
         // ジャンルページ表示
         $this->disp('/Lesson/genrepage.php');
@@ -226,64 +226,5 @@ class LessonController extends AppController
             return false;
         }
         return true;
-    }
-
-    /**
-     * レッスンのコンタクト申請
-     *
-     * @return void
-     */
-    public function contactAction()
-    {
-        //受講者(送信側)の情報を取得
-        $model = new User();
-        $sender = $model->get($_SESSION['user_id']);
-        $lessonId = $this->getIdFromUrl("/[0-9]+/");
-
-        //講師(受信側)のユーザ情報、レッスン情報を取得
-        $recever['user'] = $model->getByLesson($lessonId);
-        $model = new Lesson();
-        $recever['lesson'] = $model->get($lessonId);
-
-        //コンタクト履歴を保存
-        date_default_timezone_set('Asia/Tokyo');
-        $model = new Contact();
-        $data = array('lesson_id'    => $lessonId,
-                      'user_id'      => $sender['facebook_id'],
-                      'contacted_at' => date('Y-m-d H:i:s'));
-
-        if(!$model->insert($data)){
-            // エラー
-            exit;
-        }
-
-        // 宛先アドレス
-        $to = $recever['user']['email'];
-        // 件名
-        $subject = $recever['lesson']['name'] . "の受講申請";
-        // 本文
-        $body = <<<EOT
-{$recever['user']['last_name']}さん、こんにちは！
-Starport運営チームです！
-
-{$sender['last_name']}さんがあなたの登録しているレッスン"{$recever['lesson']['name']}"の話を聞きたいと、依頼があります。
-まずは{$sender['last_name']}さんのプロフィールを見てみましょう。
-http://{$_SERVER['HTTP_HOST']}/user/profile/{$sender['facebook_id']}
-
-その後、{$sender['last_name']}さんのプロフィールからFacebookのフレンド依頼をし、Messengerで日時と場所をご相談することをオススメします！
-
-それでは{$sender['last_name']}さんとのお時間を思いっきり楽しんでください！
-
---------------------------------------------
-Starport運営チーム
-このメールアドレスは送信専用です。
-何かありましたらお問い合わせフォームよりご連絡ください。
-お問合せ: http://{$_SERVER['HTTP_HOST']}/info/contact
---------------------------------------------
-EOT;
-        // メール送信
-        (new Mail($to, $subject, $body))->send_mail();
-        "<h2>{$recever['user']['name']}さんにメールが送信されました！</h2>" .
-        "<p>{$recever['user']['name']}さんからFacebookで連絡が来るのを待っていてください。</p>";
     }
 }
