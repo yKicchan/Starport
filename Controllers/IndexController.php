@@ -11,31 +11,31 @@ class IndexController extends AppController
     public function indexAction()
     {
         // 人気レッスン、新着レッスンを取得する
-        $userObj = new User();
-        $lessonObj = new Lesson();
+        $model = new Lesson();
+        $limit = 6;
 
-        // 人気レッスンを6つ取得
-        $popularLesson = $lessonObj->getPopularLesson(6);
-        Lesson::delBreak($popularLesson, 'about');
-        $popularUser = array();
-        foreach ($popularLesson as $l) {
-            $popularUser[] = $userObj->getByLesson($l['id']);
+        $pLesson = $model->getPopularLesson($limit);
+        $nLesson = $model->getNewLesson($limit);
+        Lesson::delBreak($pLesson, 'about');
+        Lesson::delBreak($nLesson, 'about');
+
+        $model = new User();
+        $pUser = array();
+        $nUser = array();
+        foreach ($pLesson as $lesson) {
+            $pUser[] = $model->getByLesson($lesson['id']);
         }
-
-        // 新着レッスンを6つ取得
-        $newLesson = $lessonObj->getNewLesson(6);
-        Lesson::delBreak($newLesson, 'about');
-        $newUser = array();
-        foreach ($newLesson as $l) {
-            $newUser[] = $userObj->getByLesson($l['id']);
+        foreach ($nLesson as $lesson) {
+            $nUser[] = $model->getByLesson($lesson['id']);
         }
 
         // Viewと共有するデータをセット
-        $this->set('popularLesson', $popularLesson);
-        $this->set('popularUser', $popularUser);
-        $this->set('newLesson', $newLesson);
-        $this->set('newUser', $newUser);
+        $this->set('pLesson', $pLesson);
+        $this->set('pUser', $pUser);
+        $this->set('nLesson', $nLesson);
+        $this->set('nUser', $nUser);
 
+        // トップページ表示
         $this->disp('/toppage.php');
     }
 }

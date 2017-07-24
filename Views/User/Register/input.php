@@ -1,7 +1,3 @@
-<?php
-// エラーメッセージ
-$msg = $this->get('msg');
-?>
 <section><!--プロフィール登録-->
     <div class="width412px">
         <h2>プロフィール登録</h2>
@@ -10,7 +6,7 @@ $msg = $this->get('msg');
         </div>
         <form method="post" action="/user/register/confirm">
             <!-- エラーメッセージ -->
-            <caption><?= $msg ?></caption>
+            <caption><?= $data['msg'] ?></caption>
             <div class="form-group inline">
                 <input type="text" class="form-control form148" name="last_name" placeholder="姓(必須)" value="<?= $_SESSION['last_name'] ?>"　required>
             </div>
