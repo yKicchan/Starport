@@ -139,17 +139,20 @@ abstract class Model
 
         // 追加するデータ
         foreach ($data as $key => $value) {
-            $fields[] = $key;
-            $values[] = "'" . $value . "'";
+            $fields[] = "`$key`";
+            if (is_int($value)) {
+                $values[] = $value;
+            } else {
+                $values[] = "'" . $value . "'";
+            }
         }
 
         // データをカンマで区切る
-        $field = implode(',', $fields);
-        $value = implode(',', $values);
+        $field = implode(', ', $fields);
+        $value = implode(', ', $values);
 
         // データを追加するINSERT文
-        $sql = "INSERT INTO $this->tableName ($field) VALUES ($value)";
-
+        $sql = "INSERT INTO `$this->tableName` ($field) VALUES ($value)";
         // 実行結果
         return $this->mysqli->query($sql);
     }
@@ -170,7 +173,7 @@ abstract class Model
      */
     public function getAll()
     {
-        $sql = "SELECT * FROM $this->tableName";
+        $sql = "SELECT * FROM `$this->tableName`";
         return $this->query($sql);
     }
 }
