@@ -35,6 +35,16 @@ abstract class Model
     }
 
     /**
+     * mysql接続を解放するデストラクタ
+     */
+    public function __destruct()
+    {
+        if(isset($this->mysqli)){
+            $this->mysqli->close();
+        }
+    }
+
+    /**
      * DB接続するメソッド
      *
      * @param array $info DB接続情報
@@ -55,18 +65,6 @@ abstract class Model
         } else {
             // 文字コードをUTF-8に設定
             $this->mysqli->set_charset('utf8');
-        }
-    }
-
-    /**
-     * Mysqliオブジェクトを解放する
-     *
-     * @return void
-     */
-    public function closeMysqli()
-    {
-        if(isset($this->mysqli)){
-            $this->mysqli->close();
         }
     }
 
@@ -175,5 +173,10 @@ abstract class Model
     {
         $sql = "SELECT * FROM `$this->tableName`";
         return $this->query($sql);
+    }
+
+    public function escape($value)
+    {
+        return $this->mysqli->real_escape_string($value);
     }
 }
