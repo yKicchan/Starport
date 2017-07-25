@@ -46,7 +46,9 @@ class Content extends AppModel
 
     public function getGenreName($id = 0)
     {
-        $sql = "SELECT genre.name AS genreName, content.name AS contentName FROM genre, content WHERE genre.id = content.genre_id";
+        $sql = "SELECT genre.name AS genreName, content.name AS contentName
+                FROM genre, content
+                WHERE genre.id = content.genre_id";
         if($id != 0){
             $sql .= " AND content.id = $id";
         }

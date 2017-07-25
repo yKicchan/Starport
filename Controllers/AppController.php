@@ -31,11 +31,12 @@ class AppController extends Controller
         $this->setViewDir('/Views');
         $this->setNotFoundPath('/Error/404.php');
 
-        $genre = (new Genre())->getAll();
-        $contentObj = new Content();
+        $model = new Genre();
+        $genre = $model->getAll();
+        $model = new Content();
         $content = array(array());
         foreach ($genre as $g) {
-            $contents = $contentObj->getByGenre($g['id']);
+            $contents = $model->getByGenre($g['id']);
             foreach ($contents as $c) {
                 $content[$g['id']][] = $c;
             }

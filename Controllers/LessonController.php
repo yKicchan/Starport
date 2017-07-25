@@ -18,6 +18,12 @@ class LessonController extends AppController
         // URLからレッスンidを取得
         $id = $this->getId();
 
+        // 編集して来た時
+        $post = $this->getPost();
+        if (isset($post['edit'])) {
+            $this->editCommit($id);
+        }
+
         // レッスンとその作成者情報を取得
         $model = new Lesson();
         $lesson = $model->get($id);
@@ -101,8 +107,10 @@ class LessonController extends AppController
     private function input()
     {
         // ユーザ情報とジャンル情報を取得
-        $user = (new User())->get($_SESSION['user_id']);
-        $genreContent = (new Content())->getAllZipGenreName();
+        $model = new User();
+        $user = $model->get($_SESSION['user_id']);
+        $model = new Content();
+        $genreContent = $model->getAllZipGenreName();
 
         // Viewと共有するデータをセット
         $this->set('user', $user);
@@ -193,8 +201,8 @@ class LessonController extends AppController
 
     /**
      * 必須項目の入力チェック
-     *
-     * @return boolean
+     * @param  array $post POSTデータ
+     * @return void
      */
     private function checkPostValue($post)
     {
@@ -229,8 +237,48 @@ class LessonController extends AppController
         return true;
     }
 
+    /**
+     * レッスン編集ページ
+     *
+     * @return void
+     */
     public function editAction()
     {
+        // 作成者かどうかを判定
+        $model = new Lesson();
+        $lesson = $model->get($this->getId());
+        if ($_SESSION['user_id'] != $lesson['user_id']) {
+            header("HTTP/1.0 403 Forbidden");
+            return;
+        }
+        $lesson['about'] = str_replace("<br>", "\n", $lesson['about']);
 
+        // 編集ページ表示
+        $model = new Content();
+        $genreContent = $model->getAllZipGenreName();
+        $this->set('lesson', $lesson);
+        $this->set('genreContent', $genreContent);
+        $this->disp("/Lesson/edit.php");
+    }
+
+    /**
+     * レッスン編集の確定処理
+     *
+     * @param  integer $id 変更されたレッスンのID
+     * @return void
+     */
+    private function editCommit($id)
+    {
+        $post = $this->getPost();
+        $model = new Lesson();
+        $post['lesson_name']  = $model->escape(h($post['lesson_name']));
+        $post['lesson_about'] = $model->escape(h($post['lesson_about']));
+        $post['lesson_genre'] = intval($post['lesson_genre']);
+        $post['lesson_about'] = str_replace(array("\\r\\n", "\\r", "\\n"), "<br>", $post['lesson_about']);
+        $post['lesson_about'] = str_replace("&lt;br&gt;", "<br>", $post['lesson_about']);
+        $data = array('name'       => $post['lesson_name'],
+                      'about'      => $post['lesson_about'],
+                      'content_id' => $post['lesson_genre']);
+        $model->update($id, $data);
     }
 }

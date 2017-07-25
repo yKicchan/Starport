@@ -10,23 +10,6 @@
 class Lesson extends AppModel
 {
     /**
-     * UPDATE文を実行するメソッド
-     *
-     * @param  integer $id   更新するレコードの一意なID
-     * @param  array   $data 更新するレコードのデータ
-     * @return boolean       クエリ実行結果
-     */
-    public function update($id, $data)
-    {
-        $substitution = array();
-        foreach ($data as $key => $value) {
-            $substitution[] = "$key=$value";
-        }
-        $set = implode(',', $substitution);
-        $sql = "UPDATE lesson SET $set WHERE id = $id";
-    }
-
-    /**
      * DELETE文を実行するメソッド
      *
      * @param  integer $id 行を特定する一意なID

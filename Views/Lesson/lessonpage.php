@@ -16,11 +16,11 @@
                 <div class="solid"></div>
                 <div>
                     <?php if($data['user']['facebook_id'] == $_SESSION['user_id']){ ?>
-                    <a class="resister-teacher register-margin lecture-listen" href="/lesson/edit/<?= $data['lesson']['id'] ?>">内容を編集する</a>
+                    <a class="resister-teacher register-margin lecture-listen" href="/lesson/edit/<?= $data['lesson']['id'] ?>/">内容を編集する</a>
                     <?php } else if($data['isContacted']) { ?>
                     <div class="resister-teacher register-margin lecture-listen">申請中</div>
                     <?php } else { ?>
-                    <div id="contact" class="resister-teacher register-margin lecture-listen" href="/ajax/contact/<?= $data['lesson']['id'] ?>">聞きたい！</div>
+                    <div id="contact" class="resister-teacher register-margin lecture-listen" href="/ajax/contact/<?= $data['lesson']['id'] ?>/">聞きたい！</div>
                     <?php } ?>
                     <h2 class="lecture-linehight lecture-title">講義について</h2>
                     <p><?= $data['lesson']['about'] ?></p>

@@ -162,7 +162,19 @@ abstract class Model
      * @param  array   $data 更新するレコードのデータ
      * @return boolean       クエリ実行結果
      */
-    public abstract function update($id, $data);
+    public function update($id, $data) {
+        $substitution = array();
+        foreach ($data as $key => $value) {
+            if (is_int($value)) {
+                $substitution[] = "`$key`=$value";
+            } else {
+                $substitution[] = "`$key`='$value'";
+            }
+        }
+        $set = implode(',', $substitution);
+        $sql = "UPDATE lesson SET $set WHERE id = $id";
+        return $this->mysqli->query($sql);
+    }
 
     /**
      * すべてのレコードを抽出するメソッド
