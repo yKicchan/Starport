@@ -23,6 +23,7 @@ abstract class Controller
 
     /**
      * GET変数
+     * 
      * @var Get
      */
     private $get;
