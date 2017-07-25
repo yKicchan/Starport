@@ -55,7 +55,8 @@ class UserController extends AppController
         if($method !== false && method_exists($this, $method)) {
             $this->$method();
         } else {
-            $this->notFound();
+            throw new Exception();
+
         }
     }
 

@@ -34,7 +34,7 @@ spl_autoload_register(function ($class) {
 
 /**
  * html特殊文字のエスケープ
- * 
+ *
  * @param  string $value エスケープ対象
  * @return string        エスケープ処理後
  */
@@ -48,5 +48,5 @@ try {
 } catch (Exception $e) {
     header("HTTP/1.0 404 Not Found");
     $controller = new AppController();
-    $controller->notFound();
+    $controller->disp("/Error/404.php");
 }

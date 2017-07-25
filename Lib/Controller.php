@@ -23,7 +23,7 @@ abstract class Controller
 
     /**
      * GET変数
-     * 
+     *
      * @var Get
      */
     private $get;
@@ -48,13 +48,6 @@ abstract class Controller
      * @var array
      */
     private $params;
-
-    /**
-     * 404エラーページのファイルパス
-     *
-     * @var string
-     */
-    private $notFoundPath;
 
     /**
      * フィールドを初期化するコンストラクタ
@@ -163,21 +156,6 @@ abstract class Controller
         }
         return false;
     }
-
-    /**
-     * 404 Not Found のファイルパスを設定する
-     *
-     * @param  string ファイルパス
-     * @return void
-     */
-    public function setNotFoundPath($path) { $this->notFoundPath = $path; }
-
-    /**
-     * 404 Not Found のページを表示する
-     *
-     * @return void
-     */
-    public function notFound() { $this->disp($this->notFoundPath); }
 
     /**
      * HTML特殊文字のエスケープ処理

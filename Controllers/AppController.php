@@ -29,7 +29,6 @@ class AppController extends Controller
     {
         parent::__construct();
         $this->setViewDir('/Views');
-        $this->setNotFoundPath('/Error/404.php');
 
         $model = new Genre();
         $genre = $model->getAll();
