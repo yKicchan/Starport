@@ -176,13 +176,14 @@ class AjaxController extends AppController
         // 件名
         $subject = $recever['lesson']['name'] . "の受講申請";
         // 本文
+        $host = $this->getHostName();
         $body = <<<EOT
 {$recever['user']['last_name']}さん、こんにちは！
 Starport運営チームです！
 
 {$sender['university']}の{$sender['last_name']}さんが、あなたの登録しているレッスン"{$recever['lesson']['name']}"の話を聞きたいと、依頼があります。
 まずは{$sender['last_name']}さんのプロフィールを見てみましょう。
-http://{$_SERVER['HTTP_HOST']}/user/profile/{$sender['facebook_id']}
+{$host}/user/profile/{$sender['facebook_id']}
 
 その後、{$sender['last_name']}さんのプロフィールからFacebookのフレンド依頼をし、Messengerで日時と場所をご相談することをオススメします！
 
@@ -192,7 +193,7 @@ http://{$_SERVER['HTTP_HOST']}/user/profile/{$sender['facebook_id']}
 Starport運営チーム
 このメールアドレスは送信専用です。
 何かありましたらお問い合わせフォームよりご連絡ください。
-お問合せ: http://{$_SERVER['HTTP_HOST']}/info/contact
+お問合せ: {$host}/info/contact
 --------------------------------------------
 EOT;
         // メール送信

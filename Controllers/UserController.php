@@ -19,7 +19,7 @@ class UserController extends AppController
         $lessonObj = new Lesson();
 
         // URLからユーザidを取得
-        $id = $this->getIdFromUrl("/[0-9]+/");
+        $id = $this->getId();
 
         // IDのユーザが存在しないならトップページへ
         if (!$userObj->isExist($id)) {

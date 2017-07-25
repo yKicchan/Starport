@@ -16,7 +16,7 @@ class LessonController extends AppController
     public function detailAction()
     {
         // URLからレッスンidを取得
-        $id = $this->getIdFromUrl("/[0-9]+/");
+        $id = $this->getId();
 
         // レッスンとその作成者情報を取得
         $model = new Lesson();
@@ -227,5 +227,10 @@ class LessonController extends AppController
             return false;
         }
         return true;
+    }
+
+    public function editAction()
+    {
+
     }
 }

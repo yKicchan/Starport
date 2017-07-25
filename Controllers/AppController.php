@@ -70,10 +70,10 @@ class AppController extends Controller
      *
      * @return integer ID
      */
-    public function getIdFromUrl($pattern)
+    public function getId()
     {
         $id = array();
-        preg_match($pattern, $_SERVER['REQUEST_URI'], $id);
+        preg_match("/[0-9]+/", $_SERVER['REQUEST_URI'], $id);
         return $id[0];
     }
 
@@ -97,7 +97,8 @@ class AppController extends Controller
 
     /**
      * サイトのURLを返す
+     *
      * @return string URL
      */
-    public function getHostName() { return "http://starport.dev"; }
+    public function getHostName() { return "http://{$_SERVER['HTTP_HOST']}"; }
 }
