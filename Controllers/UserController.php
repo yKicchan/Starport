@@ -10,29 +10,28 @@ class UserController extends AppController
 {
     /**
      * ユーザプロフィールページ
+     *
      * @return void
      */
     public function profileAction()
     {
-        // ユーザ情報とレッスン情報を取得するためのオブジェクト
-        $userObj = new User();
-        $lessonObj = new Lesson();
-
-        // URLからユーザidを取得
-        $id = $this->getId();
 
         // IDのユーザが存在しないならトップページへ
-        if (!$userObj->isExist($id)) {
+        $model = new User();
+        $id = $this->getId();
+        if (!$model>isExist($id)) {
             header("Location:" . '/');
-            exit;
+            return;
         }
 
         // ユーザ情報を取得
-        $user = $userObj->get($id);
-        $lesson = $lessonObj->getByUser($id);
+        $user = $model->get($id);
+        $model = new Lesson();
+        $lesson = $model->getByUser($id);
 
-        // 改行を削除
-        Lesson::delBreak($lesson, "about");
+        // エスケープ
+        $lesson['name']  = h($lesson['name']);
+        $lesson['about'] = h($lesson['about']);
 
         // Viewと共有するデータをセット
         $this->set('user', $user);
@@ -62,6 +61,7 @@ class UserController extends AppController
 
     /**
      * 情報入力画面
+     *
      * @return void
      */
     private function input()
@@ -105,6 +105,7 @@ class UserController extends AppController
 
     /**
      * 入力情報確認画面
+     *
      * @return void
      */
     private function confirm()
@@ -154,6 +155,7 @@ class UserController extends AppController
 
     /**
      * 登録完了画面
+     *
      * @return void
      */
     private function complete()

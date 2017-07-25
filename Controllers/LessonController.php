@@ -31,6 +31,9 @@ class LessonController extends AppController
         $user = $model->getByLesson($id);
         $model = new Contact();
 
+        $lesson['name']  = h($lesson['name']);
+        $lesson['about'] = h($lesson['about']);
+
         // Viewと共有するデータをセット
         $this->set('lesson', $lesson);
         $this->set('user', $user);
@@ -52,7 +55,7 @@ class LessonController extends AppController
 
         // パラメータによって表示するページを決める
         if ($param === false) {
-            $this->notFound();
+            throw new Exception();
         }
 
         // ジャンルからレッスン情報を抽出
@@ -68,8 +71,9 @@ class LessonController extends AppController
             $user[] = $userObj->getByLesson($l['id']);
         }
 
-        // 改行を削除
-        Lesson::delBreak($lesson, 'about');
+        // エスケープ
+        $lesson['name']  = h($lesson['name']);
+        $lesson['about'] = h($lesson['about']);
 
         // Viewと共有するデータをセット
         $this->set('lesson', $lesson);
@@ -95,7 +99,7 @@ class LessonController extends AppController
         if($method !== false && method_exists($this, $method)) {
             $this->$method();
         } else {
-            $this->notFound();
+            throw new Exception();
         }
     }
 
@@ -152,19 +156,14 @@ class LessonController extends AppController
 
         // 入力内容をエスケープ
         $model = new Lesson();
-        $post['lesson_name']  = $model->escape(h($post['lesson_name']));
-        $post['lesson_about'] = $model->escape(h($post['lesson_about']));
-        $post['lesson_genre'] = $post['lesson_genre'];
-
-        // 改行コードを改行タグに変換
-        $post['lesson_about'] = str_replace(array("\\r\\n", "\\r", "\\n"), "<br>", $post['lesson_about']);
-        $post['lesson_about'] = str_replace("&lt;br&gt;", "<br>", $post['lesson_about']);
+        $post['lesson_name']  = $model->escape($post['lesson_name']);
+        $post['lesson_about'] = $model->escape($post['lesson_about']);
+        $post['lesson_genre'] = intval($post['lesson_genre']);
 
         // 選択された画像が最後にアップロードされたものでない時
         if (isset($_SESSION['fileName']) && $post['lesson_image'] != $_SESSION['fileName']) {
             if (!$model->isUsedImage($_SESSION['fileName'])) {
                 // 残っている使われない画像を削除
-                echo "<pre>" . var_dump($_SESSION['fileName']) . '/' . $post['fileName'] . "</pre>";
                 unlink($this->getSysRoot() . "/htdocs/uploads/{$_SESSION['user_id']}/{$_SESSION['fileName']}");
             }
         }
@@ -174,7 +173,7 @@ class LessonController extends AppController
             $post['lesson_image'] = "/uploads/{$_SESSION['user_id']}/{$post['lesson_image']}";
         }
 
-        // 登録情報のセット
+        // 登録
         $data = array('name'       => $post['lesson_name'],
                       'about'      => $post['lesson_about'],
                       'content_id' => $post['lesson_genre'],
@@ -182,25 +181,24 @@ class LessonController extends AppController
                       'created_at' => date('Y-m-d H:i:s'),
                       'user_id'    => $_SESSION['user_id']);
 
-        // 登録実行
-        if($model->insert($data)) {
-
-            // 登録成功した時、セッションの保存内容をリセット
-            unset($_SESSION['lesson_name']);
-            unset($_SESSION['lesson_about']);
-            unset($_SESSION['lesson_genre']);
-            unset($_SESSION['fileName']);
-
-            // 登録完了画面表示
-            $this->disp('/Lesson/Register/complete.php');
-        } else {
-            // 登録失敗時
-            echo "なんかしっぱいしてもうたわ";
+        if(!$model->insert($data)) {
+            // 失敗
+            return;
         }
+
+        // 登録成功した時、セッションの保存内容をリセット
+        unset($_SESSION['lesson_name']);
+        unset($_SESSION['lesson_about']);
+        unset($_SESSION['lesson_genre']);
+        unset($_SESSION['fileName']);
+
+        // 登録完了画面表示
+        $this->disp('/Lesson/Register/complete.php');
     }
 
     /**
      * 必須項目の入力チェック
+     *
      * @param  array $post POSTデータ
      * @return void
      */
@@ -251,7 +249,8 @@ class LessonController extends AppController
             header("HTTP/1.0 403 Forbidden");
             return;
         }
-        $lesson['about'] = str_replace("<br>", "\n", $lesson['about']);
+        $lesson['name']  = h($lesson['name']);
+        $lesson['about'] = h($lesson['about']);
 
         // 編集ページ表示
         $model = new Content();
@@ -271,11 +270,14 @@ class LessonController extends AppController
     {
         $post = $this->getPost();
         $model = new Lesson();
-        $post['lesson_name']  = $model->escape(h($post['lesson_name']));
-        $post['lesson_about'] = $model->escape(h($post['lesson_about']));
+        $lesson = $model->get($id);
+        if ($lesson['user_id'] != $_SESSION['user_id']) {
+            header("HTTP/1.0 403 Forbidden");
+            return;
+        }
+        $post['lesson_name']  = $model->escape($post['lesson_name']);
+        $post['lesson_about'] = $model->escape($post['lesson_about']);
         $post['lesson_genre'] = intval($post['lesson_genre']);
-        $post['lesson_about'] = str_replace(array("\\r\\n", "\\r", "\\n"), "<br>", $post['lesson_about']);
-        $post['lesson_about'] = str_replace("&lt;br&gt;", "<br>", $post['lesson_about']);
         $data = array('name'       => $post['lesson_name'],
                       'about'      => $post['lesson_about'],
                       'content_id' => $post['lesson_genre']);

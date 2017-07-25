@@ -12,13 +12,19 @@ class IndexController extends AppController
     {
         // 人気レッスン、新着レッスンを取得する
         $model = new Lesson();
-        $limit = 6;
-
+        $limit = 5;
         $pLesson = $model->getPopularLesson($limit);
         $nLesson = $model->getNewLesson($limit);
-        Lesson::delBreak($pLesson, 'about');
-        Lesson::delBreak($nLesson, 'about');
 
+        foreach ($pLesson as &$lesson) {
+            $lesson['name']  = h($lesson['name']);
+            $lesson['about'] = h($lesson['about']);
+        }
+        foreach ($nLesson as &$lesson) {
+            $lesson['name']  = h($lesson['name']);
+            $lesson['about'] = h($lesson['about']);
+        }
+        unset($lesson);
         $model = new User();
         $pUser = array();
         $nUser = array();

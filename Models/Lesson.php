@@ -100,21 +100,6 @@ class Lesson extends AppModel
     }
 
     /**
-     * 改行タグを削除するメソッド
-     *
-     * @param  array  $rows 連想配列
-     * @param  string $key  改行タグのある値のキー
-     * @return void
-     */
-    public static function delBreak(&$rows, $key)
-    {
-        foreach ($rows as &$row) {
-            $row[$key] = str_replace("<br>", "", $row[$key]);
-        }
-        unset($row);
-    }
-
-    /**
      * 画像がすでに使用されているかを判定するメソッド
      *
      * @param  string   $fileName ファイル名
