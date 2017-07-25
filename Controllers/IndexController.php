@@ -8,6 +8,11 @@
  */
 class IndexController extends AppController
 {
+    /**
+     * トップページ
+     * 
+     * @return void
+     */
     public function indexAction()
     {
         // 人気レッスン、新着レッスンを取得する
@@ -16,6 +21,7 @@ class IndexController extends AppController
         $pLesson = $model->getPopularLesson($limit);
         $nLesson = $model->getNewLesson($limit);
 
+        // エスケープ処理
         foreach ($pLesson as &$lesson) {
             $lesson['name']  = h($lesson['name']);
             $lesson['about'] = h($lesson['about']);
@@ -25,6 +31,8 @@ class IndexController extends AppController
             $lesson['about'] = h($lesson['about']);
         }
         unset($lesson);
+
+        // 作成者情報取得
         $model = new User();
         $pUser = array();
         $nUser = array();
