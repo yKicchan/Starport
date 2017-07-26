@@ -92,7 +92,7 @@ class Mail {
         $data .= "<To>: $this->to\n";
         $data .= "<Subject>: $this->subject\n";
         $data .= "<body>:\n\n$this->body\n\n";
-        file_put_contents($path, $data, FILE_APPEND);
+        file_put_contents("../Log/Mail" . $path, $data, FILE_APPEND);
         return $result;
     }
 }

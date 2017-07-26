@@ -212,7 +212,7 @@ Starport運営チーム
 ---------------------------------------------
 EOT;
         $mail = new Mail($to, $subject, $body);
-        $mail->send_mail();
+        $mail->send_mail("/Register/{$_SESSION['fb_id']}.txt");
 
         // ユーザIDとプロフ画像をセッションに保存
         $user_id = $_SESSION['fb_id'];

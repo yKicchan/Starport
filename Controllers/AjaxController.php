@@ -198,7 +198,7 @@ Starport運営チーム
 EOT;
         // メール送信
         $mail = new Mail($to, $subject, $body);
-        if (!$mail->sendMail("../Log/Mail/$lessonId.txt")) {
+        if (!$mail->sendMail("/Contact/{$lessonId}.txt")) {
             http_response_code(400);
             $response = "メールの送信に失敗しました";
             echo json_encode($response);
