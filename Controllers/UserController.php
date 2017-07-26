@@ -35,8 +35,10 @@ class UserController extends AppController
         $lesson = $model->getByUser($id);
 
         // エスケープ
-        $lesson['name']  = h($lesson['name']);
-        $lesson['about'] = h($lesson['about']);
+        foreach ($lesson as &$val) {
+            $val['name']  = h($val['name']);
+            $val['about'] = h($val['about']);
+        }
 
         // Viewと共有するデータをセット
         $this->set('user', $user);
@@ -60,7 +62,6 @@ class UserController extends AppController
             $this->$method();
         } else {
             throw new Exception();
-
         }
     }
 
