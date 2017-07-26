@@ -84,14 +84,12 @@ class Mail {
 
         // メール送信
         $result = mb_send_mail($this->to, $this->subject, $this->body, $this->header);
-        if ($path) {
-            return false;
-        }
+
         // ログ保存
         $data  = "<Send " . (boolval($result) ? "successful" : "failed") . " at>: " . date('Y/m/d H:i:s') . "\n";
         $data .= "<To>: $this->to\n";
         $data .= "<Subject>: $this->subject\n";
-        $data .= "<body>:\n\n$this->body\n\n";
+        $data .= "<body start>\n$this->body\n<body end>\n\n";
         file_put_contents("../Log/Mail" . $path, $data, FILE_APPEND);
         return $result;
     }
