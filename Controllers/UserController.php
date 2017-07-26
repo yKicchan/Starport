@@ -23,7 +23,7 @@ class UserController extends AppController
             return;
         }
 
-        // 編集されてきたかどうか
+        // プロフィール編集されてきたとき
         $post = $this->getPost();
         if (isset($post['edit'])) {
             $this->editCommit($id);
@@ -103,7 +103,7 @@ class UserController extends AppController
             $_SESSION = array();
             $_SESSION['user_id'] = $user_id;
             $_SESSION['user_img'] = $user_img;
-            header("Location:" . "/user/profile/" . $_SESSION['user_id']);
+            header("Location:/user/profile/{$_SESSION['user_id']}");
             return;
         }
         $this->disp('/User/Register/input.php');
@@ -116,45 +116,43 @@ class UserController extends AppController
      */
     private function confirm()
     {
-        //不正アクセス対策
-        if (!isset($_POST['submit'])) {
+        // 不正アクセス対策
+        $post = $this->getPost();
+        if (!isset($post['submit'])) {
             header("Location:/");
             return;
         }
 
-        //必須項目の入力チェック
-        if ((!isset($_POST['last_name']) || $_POST['last_name'] == '') ||
-                (!isset($_POST['first_name']) || $_POST['first_name'] == '') ||
-                (!isset($_POST['email']) || $_POST['email'] == '') ||
-                (!isset($_POST['university']) || $_POST['university'] == '') ||
-                (!isset($_POST['faculty']) || $_POST['faculty'] == '') ||
-                (!isset($_POST['introduction']) || $_POST['introduction'] == '')) {
+        // 必須項目の入力チェック
+        if ((!isset($post['last_name']) || $post['last_name'] == '') ||
+                (!isset($post['first_name']) || $post['first_name'] == '') ||
+                (!isset($post['email']) || $post['email'] == '') ||
+                (!isset($post['university']) || $post['university'] == '') ||
+                (!isset($post['faculty']) || $post['faculty'] == '') ||
+                (!isset($post['introduction']) || $post['introduction'] == '')) {
             $msg = "<h3><font color='red'>必須項目を入力してください！</font></h3>";
 
-            //利用規約同意チェック
-        } else if (!isset($_POST['confirmation'])) {
+            // 利用規約同意チェック
+        } else if (!isset($post['confirmation'])) {
             $msg = "<h3><font color='red'>利用規約に同意してください！</font></h3>";
 
-            //メールアドレスの正規表現チェック
-        } else if (!preg_match("/^[0-9a-zA-Z_\.\-]+@[0-9a-zA-Z_\-]+\.[0-9a-zA-Z_\.\-]+$/", $_POST['email'])) {
+            // メールアドレスの正規表現チェック
+        } else if (!preg_match("/^[0-9a-zA-Z_\.\-]+@[0-9a-zA-Z_\-]+\.[0-9a-zA-Z_\.\-]+$/", $post['email'])) {
             $msg = "<h3><font color='red'>正しくメールアドレスを入力してください！</font></h3>";
         }
 
-        //入力内容をエスケープ
-        foreach ($_POST as $key => $value) {
-            $_SESSION[$key] = mysqli_real_escape_string(Controller::escape($value, ENT_QUOTES, 'UTF-8'));
+        // 入力内容をエスケープ
+        $model = new AppModel();
+        foreach ($post as $key => $val) {
+            $_SESSION[$key] = $model->escape($val);
         }
 
-        //改行コードを改行タグに変換
-        $_SESSION['introduction'] = str_replace(array("\\r\\n", "\\r", "\\n"), "<br>", $_SESSION['introduction']);
-        $_SESSION['introduction'] = str_replace("&lt;br&gt;", "<br>", $_SESSION['introduction']);
-
-        //入力内容に不備があった場合再度入力画面表示
+        // 入力内容に不備があった場合再度入力画面表示
         if (isset($msg)) {
             $this->set('msg', $msg);
             $this->disp('/User/Register/input.php');
         } else {
-            //入力内容に不備がなかった場合登録内容確認画面表示
+            // 入力内容に不備がなかった場合登録内容確認画面表示
             $this->disp('/User/Register/confirm.php');
         }
     }
@@ -170,8 +168,6 @@ class UserController extends AppController
         if ($_SESSION['fb_id'] == '' || !isset($_SESSION['fb_id'])) {
             return;
         }
-        // タイムゾーンを日本に設定
-        date_default_timezone_set('Asia/Tokyo');
 
         // 登録
         $data = array('facebook_id' => $_SESSION['fb_id'],
@@ -190,9 +186,10 @@ class UserController extends AppController
 
         if (!(new User)->insert($data)) {
         }
-        //登録確認メール送信
+        // 登録確認メール送信
         $to = $_SESSION['email'];
-        $subject = "Starportz.comへようこそ！";
+        $subject = "Starportcomへようこそ！";
+        $host = $this->getHostName();
         $body = <<<EOT
 ユーザ登録が完了しました！
 
@@ -201,17 +198,17 @@ Starportでは、あなたの好みにあったジャンルのレッスンを見
 スキルを交換して、自分の新しい力を引き出しましょう！！
 
 もちろん、あなた自身もレッスンを開講することができます。
-http://{$_SERVER['HTTP_HOST']}/lesson/register
+{$host}/lesson/register
 
 ※レッスンの開講にはメールアドレスの確認が必要です。
 下記リンクにアクセスして、認証を完了してください。
-http://{$_SERVER['HTTP_HOST']}/confirm-mail?type=confirm
+{$host}/confirm-mail?type=confirm
 
 ---------------------------------------------
 Starport運営チーム
 このメールアドレスは送信専用です。
 何かありましたらお問い合わせフォームよりご連絡ください。
-お問合せ: {$this->getHostName()}/info/contact
+お問合せ: {$host}/info/contact
 ---------------------------------------------
 EOT;
         $mail = new Mail($to, $subject, $body);
@@ -226,6 +223,12 @@ EOT;
         $this->disp('/User/Register/complete.php');
     }
 
+    /**
+     * プロフィールの編集内容を確定する
+     *
+     * @param  string $id ユーザーID
+     * @return void
+     */
     private function editCommit($id)
     {
         // 編集されたユーザIDが自分自身か判定
