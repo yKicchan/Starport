@@ -164,12 +164,12 @@ class AjaxController extends AppController
         //受講者(送信側)の情報を取得
         $model = new User();
         $sender = $model->get($_SESSION['user_id']);
-        $lessonId = intval($this->getIdFromUrl("/[0-9]+/"));
+        $id = intval($this->getId());
 
         //講師(受信側)のユーザ情報、レッスン情報を取得
-        $recever['user'] = $model->getByLesson($lessonId);
+        $recever['user'] = $model->getByLesson($id);
         $model = new Lesson();
-        $recever['lesson'] = $model->get($lessonId);
+        $recever['lesson'] = $model->get($id);
 
         // 宛先アドレス
         $to = $recever['user']['email'];
@@ -198,7 +198,7 @@ Starport運営チーム
 EOT;
         // メール送信
         $mail = new Mail($to, $subject, $body);
-        if (!$mail->sendMail("/Contact/{$lessonId}.txt")) {
+        if (!$mail->sendMail("/Contact/{$id}.txt")) {
             http_response_code(400);
             $response = "メールの送信に失敗しました";
             echo json_encode($response);
@@ -207,12 +207,13 @@ EOT;
 
         //コンタクト履歴を保存
         $model = new Contact();
-        $data = array('lesson_id'    => $lessonId,
+        $data = array('lesson_id'    => $id,
                       'user_id'      => $sender['facebook_id'],
                       'contacted_at' => date('Y-m-d H:i:s'));
         if(!$model->insert($data)){
             http_response_code(500);
-            echo json_encode("MYSQL error");
+            $response = "MYSQL error";
+            echo json_encode($response);
             return;
         }
         $response  = "<h2>{$recever['user']['name']}さんにメールが送信されました！</h2>";
