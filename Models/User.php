@@ -23,7 +23,8 @@ class User extends AppModel
             $substitution[] = "$key=$value";
         }
         $set = implode(',', $substitution);
-        $sql = "UPDATE user SET $set WHERE facebook_id = $id";
+        $sql = "UPDATE `user` SET $set WHERE `facebook_id` = '$id'";
+        return $this->mysqli->query($sql);
     }
 
     /**
@@ -49,7 +50,7 @@ class User extends AppModel
      */
     public function get($id)
     {
-        $sql = "SELECT * FROM user WHERE facebook_id = $id";
+        $sql = "SELECT * FROM `user` WHERE `facebook_id` = $id";
         $row = $this->query($sql);
         return $row[0];
     }
@@ -76,7 +77,7 @@ class User extends AppModel
      */
     public function getByLesson($id)
     {
-        $sql = "SELECT * FROM user WHERE facebook_id = (SELECT user_id FROM lesson WHERE id = '$id')";
+        $sql = "SELECT * FROM `user` WHERE `facebook_id` = (SELECT `user_id` FROM `lesson` WHERE `id` = $id)";
         $row = $this->query($sql);
         return $row[0];
     }

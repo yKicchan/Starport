@@ -12,7 +12,7 @@ abstract class Model
      *
      * @var Mysqli
      */
-    private $mysqli;
+    protected $mysqli;
 
     /**
      * 表名
