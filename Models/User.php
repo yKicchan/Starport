@@ -20,7 +20,7 @@ class User extends AppModel
     {
         $substitution = array();
         foreach ($data as $key => $value) {
-            $substitution[] = "$key=$value";
+            $substitution[] = "$key='$value'";
         }
         $set = implode(',', $substitution);
         $sql = "UPDATE `user` SET $set WHERE `facebook_id` = '$id'";

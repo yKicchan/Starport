@@ -15,13 +15,18 @@ class UserController extends AppController
      */
     public function profileAction()
     {
-
         // IDのユーザが存在しないならトップページへ
         $model = new User();
         $id = $this->getId();
-        if (!$model>isExist($id)) {
+        if (!$model->isExist($id)) {
             header("Location:" . '/');
             return;
+        }
+
+        // 編集されてきたかどうか
+        $post = $this->getPost();
+        if (isset($post['edit'])) {
+            $this->editCommit($id);
         }
 
         // ユーザ情報を取得
@@ -218,5 +223,35 @@ EOT;
         $_SESSION['user_id'] = $user_id;
         $_SESSION['user_img'] = $image;
         $this->disp('/User/Register/complete.php');
+    }
+
+    private function editCommit($id)
+    {
+        // 編集されたユーザIDが自分自身か判定
+        if ($id != $_SESSION['user_id']) {
+            header("HTTP/1.0 403 Forbidden");
+            return;
+        }
+
+        // データをエスケープ処理をしてユーザ情報を更新
+        $post = $this->getPost();
+        $model = new User();
+        $post['last_name']    = $model->escape($post['last_name']);
+        $post['first_name']   = $model->escape($post['first_name']);
+        $post['university']   = $model->escape($post['university']);
+        $post['faculty']      = $model->escape($post['faculty']);
+        $post['course']       = $model->escape($post['course']);
+        $post['introduction'] = $model->escape($post['introduction']);
+        $post['phrase']       = $model->escape($post['phrase']);
+
+        $data = array('last_name'    => $post['last_name'],
+                      'first_name'   => $post['first_name'],
+                      'university'   => $post['university'],
+                      'faculty'      => $post['faculty'],
+                      'course'       => $post['course'],
+                      'introduction' => $post['introduction'],
+                      'phrase'       => $post['phrase']);
+
+        $model->update($id, $data);
     }
 }
