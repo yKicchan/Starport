@@ -172,7 +172,7 @@ abstract class Model
             }
         }
         $set = implode(',', $substitution);
-        $sql = "UPDATE lesson SET $set WHERE id = $id";
+        $sql = "UPDATE `$this->tableName` SET $set WHERE id = $id";
         return $this->mysqli->query($sql);
     }
 
