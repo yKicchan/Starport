@@ -50,34 +50,13 @@ class LessonController extends AppController
      */
     public function genreAction()
     {
-        // パラメータの取得
-        $param = $this->getParam();
-
         // パラメータによって表示するページを決める
+        $param = $this->getParam();
         if ($param === false) {
             throw new Exception();
         }
 
-        // ジャンルからレッスン情報を抽出
-        $genreObj = new Genre();
-        $lessonObj = new Lesson();
-        $genre = $genreObj->getByUrl($param);
-        $lesson = $lessonObj->getByGenre($genre['id']);
-
-        // 各レッスンの作成者情報を取得
-        $userObj = new User();
-        $user = array();
-        foreach ($lesson as $l) {
-            $user[] = $userObj->getByLesson($l['id']);
-        }
-
-        // エスケープ
-        $lesson['name']  = h($lesson['name']);
-        $lesson['about'] = h($lesson['about']);
-
         // Viewと共有するデータをセット
-        $this->set('lesson', $lesson);
-        $this->set('user', $user);
         $this->set('subject', $param);
 
         // ジャンルページ表示
@@ -268,6 +247,7 @@ class LessonController extends AppController
      */
     private function editCommit($id)
     {
+        // レッスンの作成者かを判定
         $post = $this->getPost();
         $model = new Lesson();
         $lesson = $model->get($id);
@@ -275,6 +255,7 @@ class LessonController extends AppController
             header("HTTP/1.0 403 Forbidden");
             return;
         }
+        // エスケープ処理してレッスン更新
         $post['lesson_name']  = $model->escape($post['lesson_name']);
         $post['lesson_about'] = $model->escape($post['lesson_about']);
         $post['lesson_genre'] = intval($post['lesson_genre']);

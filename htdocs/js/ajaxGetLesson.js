@@ -19,6 +19,8 @@ $(function(){
             success: function(result) {
                 // 取得したレッスン情報をHTMLに表示
                 for (var i = 0; i < result.lesson.length; i++) {
+                    result.lesson[i].name  = htmlspecialchars(result.lesson[i].name);
+                    result.lesson[i].about = htmlspecialchars(result.lesson[i].about);
                     addLesson(result.lesson[i], result.user[i]);
                 }
                 if (i > 0) {
@@ -60,6 +62,15 @@ $(function(){
             row += "</div>";
             $("#lesson-container").append(row);
             console.log(row);
+        };
+
+        var htmlspecialchars = function (str) {
+            str = str.replace(/&/g,"&amp;") ;
+            str = str.replace(/"/g,"&quot;") ;
+            str = str.replace(/'/g,"&#039;") ;
+            str = str.replace(/</g,"&lt;") ;
+            str = str.replace(/>/g,"&gt;") ;
+            return str ;
         };
     };
     getLesson(limit, offset);
