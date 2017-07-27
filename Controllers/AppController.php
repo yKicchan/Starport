@@ -22,8 +22,6 @@ class AppController extends Controller
      */
     protected $helper;
 
-    private $publicPages;
-
     /**
      * アプリの初期設定
      */
@@ -46,21 +44,13 @@ class AppController extends Controller
         $this->set('genre', $genre);
         $this->set('content', $content);
 
-        // 公開ページの登録
-        $this->publicPages[] = '/';
-        foreach ($genre as $val) {
-            $this->publicPages[] = "/lesson/genre/{$val['url']}/";
-        }
-        $this->publicPages[] = "/info/attitude/";
-        $this->publicPages[] = "/info/use/";
-        $this->publicPages[] = "/info/privacy/";
-        $this->publicPages[] = "/info/teams/";
-        $this->publicPages[] = "/info/terms/";
-        $this->publicPages[] = "/info/contact/";
-
-        // 公開ページの時保存している遷移先を削除
-        if (in_array($_SERVER['REQUEST_URI'], $this->publicPages)) {
+        // 公開ページか
+        $url = $_SERVER['REQUEST_URI'];
+        if ($this->isPublicPage($url)) {
             unset($_SESSION['url']);
+        } else if (!preg_match("/^\/system\/.+$/", $url) && !isset($_SESSION['user_id'])) {
+            $_SESSION['url'] = $url;
+            header("Location:/system/login/select/");
         }
     }
 
@@ -116,18 +106,26 @@ class AppController extends Controller
     }
 
     /**
-     * ユーザのログイン状態を調査する
-     * ログインされていなければ遷移先を保存してログインページへ遷移
+     * 公開ページかどうかを判定する
+     * 公開ページとは、ログイン画面、会員登録画面以外の
+     * 閲覧にログインが必要でないページのこと
      *
-     * @return boolean ログイン状況
+     * @param  string  $url アクセスされてきたURL
+     * @return boolean      公開ページならtrue
      */
-    public function checkLoginStatus()
+    private function isPublicPage($url)
     {
-        if (isset($_SESSION['user_id'])) {
-            return true;
+        // 公開ページのURLの正規表現
+        $patterns = array("/^\/$/",
+                          "/^\/ajax\/.+$/",
+                          "/^\/info\/.+$/",
+                          "/^\/lesson\/genre\/[a-z]+\/$/");
+        // 公開ページか判定
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $url)) {
+                return true;
+            }
         }
-        $_SESSION['url'] = $_SERVER['REQUEST_URI'];
-        header("Location:/system/login/select/");
         return false;
     }
 }

@@ -15,11 +15,6 @@ class LessonController extends AppController
      */
     public function detailAction()
     {
-        // ログインチェック
-        if (!$this->checkLoginStatus()) {
-            return;
-        }
-
         // URLからレッスンidを取得
         $id = $this->getId();
 
@@ -76,11 +71,6 @@ class LessonController extends AppController
      */
     public function registerAction()
     {
-        // ログインチェック
-        if (!$this->checkLoginStatus()) {
-            return;
-        }
-
         // パラメータの取得
         $method = $this->getParam();
 
@@ -231,11 +221,6 @@ class LessonController extends AppController
      */
     public function editAction()
     {
-        // ログインチェック
-        if (!$this->checkLoginStatus()) {
-            return;
-        }
-        
         // 作成者かどうかを判定
         $model = new Lesson();
         $lesson = $model->get($this->getId());
