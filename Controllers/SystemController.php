@@ -26,7 +26,6 @@ class SystemController extends AppController
             $this->$method();
         } else {
             throw new Exception();
-
         }
     }
 
@@ -52,8 +51,9 @@ class SystemController extends AppController
         $user['id'] = $_SESSION['user_id'];
         // $response = $this->facebook->get('/me?fields=id', $this->helper->getAccessToken());
         // $user = $response->getGraphUser();
-        if ((new User)->isExist($user['id'])) {
-            // $user = $userObj->get();
+        $model = new User();
+        if ($model->isExist($user['id'])) {
+            // $user = $model->get($user['id']);
             // $_SESSION['user_id'] = $user['facebook_id'];
             // $_SESSION['user_img'] = $user['facebook_photo_url'];
 
@@ -64,6 +64,7 @@ class SystemController extends AppController
                 unset($_SESSION['url']);
             }
             header("Location:" . $url);
+            return;
         } else {
             $this->disp('/System/pleaseRegister.html');
         }

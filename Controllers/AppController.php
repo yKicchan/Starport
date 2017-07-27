@@ -22,6 +22,8 @@ class AppController extends Controller
      */
     protected $helper;
 
+    private $publicPages;
+
     /**
      * アプリの初期設定
      */
@@ -30,6 +32,7 @@ class AppController extends Controller
         parent::__construct();
         $this->setViewDir('/Views');
 
+        // ジャンル情報を取得
         $model = new Genre();
         $genre = $model->getAll();
         $model = new Content();
@@ -42,6 +45,23 @@ class AppController extends Controller
         }
         $this->set('genre', $genre);
         $this->set('content', $content);
+
+        // 公開ページの登録
+        $this->publicPages[] = '/';
+        foreach ($genre as $val) {
+            $this->publicPages[] = "/lesson/genre/{$val['url']}/";
+        }
+        $this->publicPages[] = "/info/attitude/";
+        $this->publicPages[] = "/info/use/";
+        $this->publicPages[] = "/info/privacy/";
+        $this->publicPages[] = "/info/teams/";
+        $this->publicPages[] = "/info/terms/";
+        $this->publicPages[] = "/info/contact/";
+
+        // 公開ページの時保存している遷移先を削除
+        if (in_array($_SERVER['REQUEST_URI'], $this->publicPages)) {
+            unset($_SESSION['url']);
+        }
     }
 
     /**
@@ -93,5 +113,21 @@ class AppController extends Controller
 
         // ヘルパーの生成
         $this->helper = $this->facebook->getRedirectLoginHelper();
+    }
+
+    /**
+     * ユーザのログイン状態を調査する
+     * ログインされていなければ遷移先を保存してログインページへ遷移
+     *
+     * @return boolean ログイン状況
+     */
+    public function checkLoginStatus()
+    {
+        if (isset($_SESSION['user_id'])) {
+            return true;
+        }
+        $_SESSION['url'] = $_SERVER['REQUEST_URI'];
+        header("Location:/system/login/select/");
+        return false;
     }
 }

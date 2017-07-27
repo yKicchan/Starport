@@ -15,6 +15,11 @@ class SettingController extends AppController
      */
     public function profileAction()
     {
+        // ログインチェック
+        if (!$this->checkLoginStatus()) {
+            return;
+        }
+
         $model = new User();
         $user = $model->get($_SESSION['user_id']);
         $this->set('user', $user);
@@ -29,6 +34,11 @@ class SettingController extends AppController
      */
     public function lessonAction()
     {
+        // ログインチェック
+        if (!$this->checkLoginStatus()) {
+            return;
+        }
+
         // 作成されたレッスンの一覧を表示
         $model = new Lesson();
         $lesson = $model->getByUser($_SESSION['user_id']);
@@ -48,6 +58,10 @@ class SettingController extends AppController
      */
     public function accountAction()
     {
+        // ログインチェック
+        if (!$this->checkLoginStatus()) {
+            return;
+        }
         $this->disp('/Setting/account.php');
     }
 
@@ -59,6 +73,10 @@ class SettingController extends AppController
      */
     public function applicationAction()
     {
+        // ログインチェック
+        if (!$this->checkLoginStatus()) {
+            return;
+        }
         $this->disp('/Setting/application.php');
     }
 }

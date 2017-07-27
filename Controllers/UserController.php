@@ -15,6 +15,10 @@ class UserController extends AppController
      */
     public function profileAction()
     {
+        // ログインチェック
+        if (!$this->checkLoginStatus()) {
+            return;
+        }
         // IDのユーザが存在しないならトップページへ
         $model = new User();
         $id = $this->getId();
