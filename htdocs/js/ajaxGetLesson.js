@@ -61,7 +61,6 @@ $(function(){
             row += "\t</div>\n";
             row += "</div>";
             $("#lesson-container").append(row);
-            console.log(row);
         };
 
         var htmlspecialchars = function (str) {
