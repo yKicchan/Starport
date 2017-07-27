@@ -70,12 +70,6 @@ class Dispatcher
         // パラメータの取得
         $url = $_GET['url'];
 
-        // 宛先が指定されていたらそこのURLを使う
-        if(isset($_SESSION['url'])){
-            $url = $_SESSION['url'];
-            unset($_SESSION['url']);
-        }
-
         // 末尾の"/"を削除
         $param = preg_replace("/\/?$/", '', $url);
 
