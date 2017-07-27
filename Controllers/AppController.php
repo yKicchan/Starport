@@ -94,11 +94,4 @@ class AppController extends Controller
         // ヘルパーの生成
         $this->helper = $this->facebook->getRedirectLoginHelper();
     }
-
-    /**
-     * サイトのURLを返す
-     *
-     * @return string URL
-     */
-    public function getHostName() { return "http://{$_SERVER['HTTP_HOST']}"; }
 }

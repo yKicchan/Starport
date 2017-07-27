@@ -158,6 +158,14 @@ abstract class Controller
     }
 
     /**
+     * サイトのURLを返す(http://exam.com)
+     *
+     * @return string URL
+     */
+    public function getHostName() { return (isset($_SERVER['HTTPS']) ? "https" : "http" ) . "://{$_SERVER['HTTP_HOST']}"; }
+
+
+    /**
      * HTML特殊文字のエスケープ処理
      *
      * @param  string $str エスケープ処理する文字列
