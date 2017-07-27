@@ -9,6 +9,16 @@
 class InfoController extends AppController
 {
     /**
+     * 概要ページ
+     * 
+     * @return void
+     */
+    public function aboutAction()
+    {
+        $this->disp('/Info/about.php');
+    }
+
+    /**
      * 心構えのページ
      *
      * @return void
