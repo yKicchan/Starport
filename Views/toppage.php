@@ -44,7 +44,7 @@
     </div>
     <div>
         <?php if(!isset($_SESSION['user_id'])){ ?>
-      <a class="resister-teacher register-margin" href="/system/signup/input/">facebookで登録！</a>
+      <a class="resister-teacher register-margin" href="/system/signup/auth/">facebookで登録！</a>
         <?php }else{ ?>
       <a class="resister-teacher register-margin" href="/lesson/register/input/">レッスンを作る！</a>
         <?php } ?>
@@ -113,7 +113,7 @@
     </div>
     <div>
         <?php if(!isset($_SESSION['user_id'])){ ?>
-      <a class="resister-teacher register-margin" href="/system/signup/input/">facebookで登録！</a>
+      <a class="resister-teacher register-margin" href="/system/signup/auth/">facebookで登録！</a>
         <?php }else{ ?>
       <a class="resister-teacher register-margin" href="/lesson/register/input/">レッスンを作る！</a>
         <?php } ?>
