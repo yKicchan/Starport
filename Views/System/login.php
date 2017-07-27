@@ -15,7 +15,7 @@
             <hr class="m-y-2">
             <p>※facebookアカウントをお持ちで無い方は、申しわけありませんがご利用いただけません。</p>
             <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/system/signup/input/" role="button">facebookで会員登録</a>
+                <a class="btn btn-primary btn-lg" href="/system/signup/auth/" role="button">facebookで会員登録</a>
             </p>
         </div>
     </div><!-- .container -->

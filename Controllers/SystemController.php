@@ -23,7 +23,11 @@ class SystemController extends AppController
 
         // パラメータによって表示するページを決める
         if($method !== false && method_exists($this, $method)) {
-            $this->$method();
+            if ($method == "auth") {
+                $this->$method('signin', 'login');
+            } else{
+                $this->$method();
+            }
         } else {
             throw new Exception();
         }
@@ -46,16 +50,14 @@ class SystemController extends AppController
      */
     private function login()
     {
-        $_SESSION['user_id'] = '1711495782511126';
-        $_SESSION['user_img'] = 'https://graph.facebook.com/1711495782511126/picture?width=150&amp;height=150';
-        $user['id'] = $_SESSION['user_id'];
-        // $response = $this->facebook->get('/me?fields=id', $this->helper->getAccessToken());
-        // $user = $response->getGraphUser();
+        // Facebookのユーザ情報を取得
+        $response = $this->facebook->get('/me?fields=id', $this->helper->getAccessToken());
+        $user = $response->getGraphUser();
         $model = new User();
         if ($model->isExist($user['id'])) {
-            // $user = $model->get($user['id']);
-            // $_SESSION['user_id'] = $user['facebook_id'];
-            // $_SESSION['user_img'] = $user['facebook_photo_url'];
+            $user = $model->get($user['id']);
+            $_SESSION['user_id'] = $user['facebook_id'];
+            $_SESSION['user_img'] = $user['facebook_photo_url'];
 
             // 遷移先の設定
             $url = "/user/profile/" . $_SESSION['user_id'] . '/';
@@ -75,14 +77,13 @@ class SystemController extends AppController
      *
      * @return void
      */
-    private function auth()
+    private function auth($action, $param)
     {
         // リダイレクト先の設定
-        $loginUrl = $this->helper->getLoginUrl($this->getHostName() . "/system/signin/login/");
+        $loginUrl = $this->helper->getLoginUrl($this->getHostName() . "/system/{$action}/{$param}/", ['email']);
 
         // ログインページに遷移
         header("Location:$loginUrl");
-        // header("Location:/system/signin/login/");
     }
 
     /**
@@ -106,11 +107,18 @@ class SystemController extends AppController
      */
     public function signUpAction()
     {
+        // Facebookの初期設定
+        $this->setFacebook();
+
         // パラメータの取得
         $method = $this->getParam();
         // パラメータによって表示するページを決める
         if($method !== false && method_exists($this, $method)) {
-            $this->$method();
+            if ($method == "auth") {
+                $this->$method('signup', 'input');
+            } else{
+                $this->$method();
+            }
         } else {
             throw new Exception();
         }
@@ -123,28 +131,22 @@ class SystemController extends AppController
      */
     private function input()
     {
-        // Facebookの初期設定
-        $this->setFacebook();
-
-        // アクセストークンの取得
-        if(isset($_SESSION['accessToken'])){
-            // 入力画面表示
-            $this->disp('/System/Signup/input.php');
-            return;
-        } else {
+        // アクセストークン取得
+        if (!isset($_SESSION['accessToken'])) {
             $_SESSION['accessToken'] = $this->helper->getAccessToken();
-        }
-        // ユーザ情報を取得
-        $response = $this->facebook->get('/me?fields=id,first_name,last_name,email', $_SESSION['accessToken']);
-        $user = $response->getGraphUser();
-        $photo_url = 'https://graph.facebook.com/' . $user['id'] . '/picture?width=150&height=150';
 
-        // セッションにユーザ情報を保存
-        $_SESSION['fb_id'] = $user['id'];
-        $_SESSION['fb_photo_url'] = $photo_url;
-        $_SESSION['first_name'] = $user['first_name'];
-        $_SESSION['last_name'] = $user['last_name'];
-        $_SESSION['email'] = $user['email'];
+            // ユーザ情報取得
+            $response = $this->facebook->get('/me?fields=id,first_name,last_name,email', $_SESSION['accessToken']);
+            $user = $response->getGraphUser();
+            $photo_url = 'https://graph.facebook.com/' . $user['id'] . '/picture?width=150&height=150';
+
+            // セッションにユーザ情報を保存
+            $_SESSION['fb_id'] = $user['id'];
+            $_SESSION['fb_photo_url'] = $photo_url;
+            $_SESSION['first_name'] = $user['first_name'];
+            $_SESSION['last_name'] = $user['last_name'];
+            $_SESSION['email'] = $user['email'];
+        }
 
         // ユーザ重複確認
         if ((new User)->isExist($user['id'])) {
@@ -217,9 +219,9 @@ class SystemController extends AppController
     {
         // Facebook連携チェック
         if ($_SESSION['fb_id'] == '' || !isset($_SESSION['fb_id'])) {
+            header("Location:/");
             return;
         }
-
         // 登録
         $data = array('facebook_id' => $_SESSION['fb_id'],
                       'last_name'   => $_SESSION['last_name'],
@@ -263,7 +265,7 @@ Starport運営チーム
 ---------------------------------------------
 EOT;
         $mail = new Mail($to, $subject, $body);
-        $mail->send_mail("/Signup/{$_SESSION['fb_id']}.txt");
+        $mail->sendMail("/Signup/{$_SESSION['fb_id']}.txt");
 
         // ユーザIDとプロフ画像をセッションに保存
         $user_id = $_SESSION['fb_id'];
