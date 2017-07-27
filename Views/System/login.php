@@ -6,7 +6,7 @@
             <hr class="m-y-2">
             <!-- <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
             <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/system/login/auth/" role="button">facebookログイン</a>
+                <a class="btn btn-primary btn-lg" href="/system/signin/auth/" role="button">facebookログイン</a>
             </p>
         </div>
         <div class="jumbotron">
@@ -15,7 +15,7 @@
             <hr class="m-y-2">
             <p>※facebookアカウントをお持ちで無い方は、申しわけありませんがご利用いただけません。</p>
             <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/user/register/" role="button">facebookで会員登録</a>
+                <a class="btn btn-primary btn-lg" href="/system/signup/input/" role="button">facebookで会員登録</a>
             </p>
         </div>
     </div><!-- .container -->

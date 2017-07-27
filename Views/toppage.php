@@ -44,9 +44,9 @@
     </div>
     <div>
         <?php if(!isset($_SESSION['user_id'])){ ?>
-      <a class="resister-teacher register-margin" href="/user/register/">facebookで登録！</a>
+      <a class="resister-teacher register-margin" href="/system/signup/input/">facebookで登録！</a>
         <?php }else{ ?>
-      <a class="resister-teacher register-margin" href="/lesson/register/">レッスンを作る！</a>
+      <a class="resister-teacher register-margin" href="/lesson/register/input/">レッスンを作る！</a>
         <?php } ?>
     </div>
     <div class="container how-to-wrapper">
@@ -113,9 +113,9 @@
     </div>
     <div>
         <?php if(!isset($_SESSION['user_id'])){ ?>
-      <a class="resister-teacher register-margin" href="/user/register/">facebookで登録！</a>
+      <a class="resister-teacher register-margin" href="/system/signup/input/">facebookで登録！</a>
         <?php }else{ ?>
-      <a class="resister-teacher register-margin" href="/lesson/register/">レッスンを作る！</a>
+      <a class="resister-teacher register-margin" href="/lesson/register/input/">レッスンを作る！</a>
         <?php } ?>
     </div>
 

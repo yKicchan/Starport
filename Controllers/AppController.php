@@ -50,7 +50,7 @@ class AppController extends Controller
             unset($_SESSION['url']);
         } else if (!preg_match("/^\/system\/.+$/", $url) && !isset($_SESSION['user_id'])) {
             $_SESSION['url'] = $url;
-            header("Location:/system/login/select/");
+            header("Location:/system/select/");
         }
     }
 

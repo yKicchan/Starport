@@ -37,8 +37,8 @@
         <p><?= $_SESSION['instagram'] ?></p><!--InstagramID-->
         <div class="solid"></div>
     </div>
-    <a class="confirm-button bg-ffcdd2" href="/user/register/input">戻る</a>
-    <a class="confirm-button bg-ef5350" href="/user/register/complete">登録完了！</a>
+    <a class="confirm-button bg-ffcdd2" href="/system/signup/input">戻る</a>
+    <a class="confirm-button bg-ef5350" href="/system/signup/complete">登録完了！</a>
 </div>
         <style>
             @media all and (min-width: 412px){

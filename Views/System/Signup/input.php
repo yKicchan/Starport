@@ -4,7 +4,7 @@
         <div class="row">
             <img src="<?= $_SESSION['fb_photo_url'] ?>">
         </div>
-        <form method="post" action="/user/register/confirm">
+        <form method="post" action="/system/signup/confirm">
             <!-- エラーメッセージ -->
             <caption><?= $data['msg'] ?></caption>
             <div class="form-group inline">
@@ -42,7 +42,7 @@
                 <input type="text" class="form-control form300" name="instagram" placeholder="例:starportcom" value="<?= $_SESSION['instagram'] ?>">
             </div>
             <div class="form-group inline form300">
-                <input type="checkbox" name="confirmation" required><a href="/info/terms">利用規約</a>と<a href="/info/privacy_policy">プライバシーポリシー</a>に同意する。
+                <input type="checkbox" name="confirmation" required><a href="/info/terms">利用規約</a>と<a href="/info/privacy">プライバシーポリシー</a>に同意する。
             </div>
             <div class="form-group">
                 <button name="submit" type="submit" class="btn btn-default">完了！</button>
