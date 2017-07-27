@@ -21,10 +21,10 @@
         text-align: left;
     }
     .profile-images {
-        width: 48px;
-        height: 48px;
+        width: 44px;
+        height: 44px;
         position: absolute;
-        top: 41px;
+        top: 44px;
         left: 1px;
     }
     .profile-images img {

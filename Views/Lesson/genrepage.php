@@ -1,14 +1,6 @@
-<?php
-//
-//$lesson[][] = このジャンルのレッスンが格納されている2次元連想配列
-//
-$lesson = $this->get('lesson');
-$user = $this->get('user');
-$subject = $this->get('param');
-?>
 <!--ジャンルごとのヘダー画像一覧-->
 <?php
-switch ( $subject ):
+switch ( $data['subject'] ):
   case 'english':?>
     <img class="header-genre" src="/images/header-english.jpg"  width="100%" max-height="240px" />
     <div class="genre-top"><b>英語</b></div>
@@ -169,8 +161,8 @@ switch ( $subject ):
 endswitch;
 require_once $this->getSysRoot() . $this->getViewDir() . '/header-genres.php'; ?>
 <script src="/js/TextOverFlow.js" charset="utf-8"></script>
-<script id="script" type="text/javascript">
-    var genre = <?= json_encode($subject) ?>;
+<script type="text/javascript">
+    var genre = <?= json_encode($data['subject']) ?>;
 </script>
 <script src="/js/ajaxGetLesson.js" charset="utf-8"></script>
 <div class="self-container" id="lesson-container">

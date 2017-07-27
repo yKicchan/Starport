@@ -12,7 +12,7 @@ abstract class Model
      *
      * @var Mysqli
      */
-    private $mysqli;
+    protected $mysqli;
 
     /**
      * 表名
@@ -31,6 +31,16 @@ abstract class Model
         // 表名がないときクラス名から表名を設定する
         if ($this->tableName == null) {
             $this->setTableNameFromClassName();
+        }
+    }
+
+    /**
+     * mysql接続を解放するデストラクタ
+     */
+    public function __destruct()
+    {
+        if(isset($this->mysqli)){
+            $this->mysqli->close();
         }
     }
 
@@ -55,18 +65,6 @@ abstract class Model
         } else {
             // 文字コードをUTF-8に設定
             $this->mysqli->set_charset('utf8');
-        }
-    }
-
-    /**
-     * Mysqliオブジェクトを解放する
-     *
-     * @return void
-     */
-    public function closeMysqli()
-    {
-        if(isset($this->mysqli)){
-            $this->mysqli->close();
         }
     }
 
@@ -139,17 +137,20 @@ abstract class Model
 
         // 追加するデータ
         foreach ($data as $key => $value) {
-            $fields[] = $key;
-            $values[] = "'" . $value . "'";
+            $fields[] = "`$key`";
+            if (is_int($value)) {
+                $values[] = $value;
+            } else {
+                $values[] = "'" . $value . "'";
+            }
         }
 
         // データをカンマで区切る
-        $field = implode(',', $fields);
-        $value = implode(',', $values);
+        $field = implode(', ', $fields);
+        $value = implode(', ', $values);
 
         // データを追加するINSERT文
-        $sql = "INSERT INTO $this->tableName ($field) VALUES ($value)";
-
+        $sql = "INSERT INTO `$this->tableName` ($field) VALUES ($value)";
         // 実行結果
         return $this->mysqli->query($sql);
     }
@@ -161,7 +162,19 @@ abstract class Model
      * @param  array   $data 更新するレコードのデータ
      * @return boolean       クエリ実行結果
      */
-    public abstract function update($id, $data);
+    public function update($id, $data) {
+        $substitution = array();
+        foreach ($data as $key => $value) {
+            if (is_int($value)) {
+                $substitution[] = "`$key`=$value";
+            } else {
+                $substitution[] = "`$key`='$value'";
+            }
+        }
+        $set = implode(',', $substitution);
+        $sql = "UPDATE `$this->tableName` SET $set WHERE id = $id";
+        return $this->mysqli->query($sql);
+    }
 
     /**
      * すべてのレコードを抽出するメソッド
@@ -170,7 +183,12 @@ abstract class Model
      */
     public function getAll()
     {
-        $sql = "SELECT * FROM $this->tableName";
+        $sql = "SELECT * FROM `$this->tableName`";
         return $this->query($sql);
+    }
+
+    public function escape($value)
+    {
+        return $this->mysqli->real_escape_string($value);
     }
 }

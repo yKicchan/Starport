@@ -8,34 +8,48 @@
  */
 class IndexController extends AppController
 {
+    /**
+     * トップページ
+     * 
+     * @return void
+     */
     public function indexAction()
     {
         // 人気レッスン、新着レッスンを取得する
-        $userObj = new User();
-        $lessonObj = new Lesson();
+        $model = new Lesson();
+        $limit = 5;
+        $pLesson = $model->getPopularLesson($limit);
+        $nLesson = $model->getNewLesson($limit);
 
-        // 人気レッスンを6つ取得
-        $popularLesson = $lessonObj->getPopularLesson(6);
-        Lesson::delBreak($popularLesson, 'about');
-        $popularUser = array();
-        foreach ($popularLesson as $l) {
-            $popularUser[] = $userObj->getByLesson($l['id']);
+        // エスケープ処理
+        foreach ($pLesson as &$lesson) {
+            $lesson['name']  = h($lesson['name']);
+            $lesson['about'] = h($lesson['about']);
         }
+        foreach ($nLesson as &$lesson) {
+            $lesson['name']  = h($lesson['name']);
+            $lesson['about'] = h($lesson['about']);
+        }
+        unset($lesson);
 
-        // 新着レッスンを6つ取得
-        $newLesson = $lessonObj->getNewLesson(6);
-        Lesson::delBreak($newLesson, 'about');
-        $newUser = array();
-        foreach ($newLesson as $l) {
-            $newUser[] = $userObj->getByLesson($l['id']);
+        // 作成者情報取得
+        $model = new User();
+        $pUser = array();
+        $nUser = array();
+        foreach ($pLesson as $lesson) {
+            $pUser[] = $model->getByLesson($lesson['id']);
+        }
+        foreach ($nLesson as $lesson) {
+            $nUser[] = $model->getByLesson($lesson['id']);
         }
 
         // Viewと共有するデータをセット
-        $this->set('popularLesson', $popularLesson);
-        $this->set('popularUser', $popularUser);
-        $this->set('newLesson', $newLesson);
-        $this->set('newUser', $newUser);
+        $this->set('pLesson', $pLesson);
+        $this->set('pUser', $pUser);
+        $this->set('nLesson', $nLesson);
+        $this->set('nUser', $nUser);
 
+        // トップページ表示
         $this->disp('/toppage.php');
     }
 }

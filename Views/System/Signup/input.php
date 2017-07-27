@@ -1,16 +1,12 @@
-<?php
-// エラーメッセージ
-$msg = $this->get('msg');
-?>
 <section><!--プロフィール登録-->
     <div class="width412px">
         <h2>プロフィール登録</h2>
         <div class="row">
             <img src="<?= $_SESSION['fb_photo_url'] ?>">
         </div>
-        <form method="post" action="/user/register/confirm">
+        <form method="post" action="/system/signup/confirm">
             <!-- エラーメッセージ -->
-            <caption><?= $msg ?></caption>
+            <caption><?= $data['msg'] ?></caption>
             <div class="form-group inline">
                 <input type="text" class="form-control form148" name="last_name" placeholder="姓(必須)" value="<?= $_SESSION['last_name'] ?>"　required>
             </div>
@@ -46,7 +42,7 @@ $msg = $this->get('msg');
                 <input type="text" class="form-control form300" name="instagram" placeholder="例:starportcom" value="<?= $_SESSION['instagram'] ?>">
             </div>
             <div class="form-group inline form300">
-                <input type="checkbox" name="confirmation" required><a href="/info/terms">利用規約</a>と<a href="/info/privacy_policy">プライバシーポリシー</a>に同意する。
+                <input type="checkbox" name="confirmation" required><a href="/info/terms">利用規約</a>と<a href="/info/privacy">プライバシーポリシー</a>に同意する。
             </div>
             <div class="form-group">
                 <button name="submit" type="submit" class="btn btn-default">完了！</button>

@@ -10,23 +10,6 @@
 class Lesson extends AppModel
 {
     /**
-     * UPDATE文を実行するメソッド
-     *
-     * @param  integer $id   更新するレコードの一意なID
-     * @param  array   $data 更新するレコードのデータ
-     * @return boolean       クエリ実行結果
-     */
-    public function update($id, $data)
-    {
-        $substitution = array();
-        foreach ($data as $key => $value) {
-            $substitution[] = "$key=$value";
-        }
-        $set = implode(',', $substitution);
-        $sql = "UPDATE lesson SET $set WHERE id = $id";
-    }
-
-    /**
      * DELETE文を実行するメソッド
      *
      * @param  integer $id 行を特定する一意なID
@@ -114,21 +97,6 @@ class Lesson extends AppModel
     {
         $sql = "SELECT * FROM lesson ORDER BY count DESC LIMIT $limit";
         return $this->query($sql);
-    }
-
-    /**
-     * 改行タグを削除するメソッド
-     *
-     * @param  array  $rows 連想配列
-     * @param  string $key  改行タグのある値のキー
-     * @return void
-     */
-    public static function delBreak(&$rows, $key)
-    {
-        foreach ($rows as &$row) {
-            $row[$key] = str_replace("<br>", "", $row[$key]);
-        }
-        unset($row);
     }
 
     /**

@@ -2,6 +2,7 @@
 <script src="/js/img_list.js" charset="utf-8"></script>
 <script src="/js/img_click.js" charset="utf-8"></script>
 <script src="/js/upload.js" charset="utf-8"></script>
+<script src="/js/lessonPreview.js" charset="utf-8"></script>
 <div id="status">
     <section><!--レッスン登録-->
         <div class="width412px" >

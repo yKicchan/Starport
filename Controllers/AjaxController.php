@@ -23,8 +23,16 @@ class AjaxController extends AppController
     }
 
     /**
+     * Ajaxによる通信かどうかを判定
+     *
+     * @return boolean True or False
+     */
+    public function isAjax() { return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'; }
+
+    /**
      * ファイルをアップロードするメソッド
      * 保存結果を出力する
+     *
      * @return void
      */
     public function fileUploadAction()
@@ -55,6 +63,7 @@ class AjaxController extends AppController
 
     /**
      * ファイルを保存する
+     *
      * @return string 保存したファイルのパス
      */
     private function saveFile()
@@ -112,6 +121,7 @@ class AjaxController extends AppController
 
     /**
      * レッスン情報を取得する
+     *
      * @return void
      */
     public function getLessonAction()
@@ -145,8 +155,69 @@ class AjaxController extends AppController
     }
 
     /**
-     * Ajaxによる通信かどうかを判定
-     * @return boolean True or False
+     * レッスンのコンタクト申請
+     *
+     * @return void
      */
-    public function isAjax() { return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'; }
+    public function contactAction()
+    {
+        //受講者(送信側)の情報を取得
+        $model = new User();
+        $sender = $model->get($_SESSION['user_id']);
+        $id = intval($this->getId());
+
+        //講師(受信側)のユーザ情報、レッスン情報を取得
+        $recever['user'] = $model->getByLesson($id);
+        $model = new Lesson();
+        $recever['lesson'] = $model->get($id);
+
+        // 宛先アドレス
+        $to = $recever['user']['email'];
+        // 件名
+        $subject = $recever['lesson']['name'] . "の受講申請";
+        // 本文
+        $host = $this->getHostName();
+        $body = <<<EOT
+{$recever['user']['last_name']}さん、こんにちは！
+Starport運営チームです！
+
+{$sender['university']}の{$sender['last_name']}さんが、あなたの登録しているレッスン"{$recever['lesson']['name']}"の話を聞きたいと、依頼があります。
+まずは{$sender['last_name']}さんのプロフィールを見てみましょう。
+{$host}/user/profile/{$sender['facebook_id']}
+
+その後、{$sender['last_name']}さんのプロフィールからFacebookのフレンド依頼をし、Messengerで日時と場所をご相談することをオススメします！
+
+それでは{$sender['last_name']}さんとのお時間を思いっきり楽しんでください！
+
+--------------------------------------------
+Starport運営チーム
+このメールアドレスは送信専用です。
+何かありましたらお問い合わせフォームよりご連絡ください。
+お問合せ: {$host}/info/contact
+--------------------------------------------
+EOT;
+        // メール送信
+        $mail = new Mail($to, $subject, $body);
+        if (!$mail->sendMail("/Contact/{$id}.txt")) {
+            http_response_code(400);
+            $response = "メールの送信に失敗しました";
+            echo json_encode($response);
+            return;
+        }
+
+        //コンタクト履歴を保存
+        $model = new Contact();
+        $data = array('lesson_id'    => $id,
+                      'user_id'      => $sender['facebook_id'],
+                      'contacted_at' => date('Y-m-d H:i:s'));
+        if(!$model->insert($data)){
+            http_response_code(500);
+            $response = "MYSQL error";
+            echo json_encode($response);
+            return;
+        }
+        $response  = "<h2>{$recever['user']['name']}さんにメールが送信されました！</h2>";
+        $response .= "<p>{$recever['user']['name']}さんからFacebookで連絡が来るのを待っていてください。</p>";
+        echo json_encode($response);
+    }
 }

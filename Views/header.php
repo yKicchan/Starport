@@ -68,14 +68,14 @@
 
                 <div class="nav-top">
                     <?php if (!isset($_SESSION['user_id'])) { ?>
-                        <a href="/system/login/select/" class="navbar-right">ログイン</a>
+                        <a href="/system/select/" class="navbar-right">ログイン</a>
                     <?php } else { ?>
                         <img id="accountmenu" src="<?= $_SESSION['user_img'] ?>" width="50px" height="50px" />
                         <ul class="accountmenu">
                             <li><a href="/user/profile/<?= $_SESSION['user_id'] ?>/">マイページ</a></li>
                             <li><a href="/lesson/register/input/">レッスン登録</a></li>
                             <li><a href="/setting/profile/">プロフィール編集</a></li>
-                            <li><a href="/system/logout/">ログアウト</a></li>
+                            <li><a href="/system/signout/">ログアウト</a></li>
                         </ul>
                         <script>
                             $(function () {

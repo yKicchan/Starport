@@ -1,7 +1,7 @@
 <?php
 /**
  * レッスン情報に関するページの処理を行うクラス
- * 
+ *
  * @package     starport
  * @subpackage  Controllers
  * @author      yKicchan
@@ -16,7 +16,13 @@ class LessonController extends AppController
     public function detailAction()
     {
         // URLからレッスンidを取得
-        $id = $this->getIdFromUrl("/[0-9]+/");
+        $id = $this->getId();
+
+        // 編集して来た時
+        $post = $this->getPost();
+        if (isset($post['edit'])) {
+            $this->editCommit($id);
+        }
 
         // レッスンとその作成者情報を取得
         $model = new Lesson();
@@ -25,10 +31,13 @@ class LessonController extends AppController
         $user = $model->getByLesson($id);
         $model = new Contact();
 
+        $lesson['name']  = h($lesson['name']);
+        $lesson['about'] = h($lesson['about']);
+
         // Viewと共有するデータをセット
         $this->set('lesson', $lesson);
         $this->set('user', $user);
-        $this->set('isContacted', $model->isContacted($lesson['id'], $user['facebook_id']));
+        $this->set('isContacted', $model->isContacted($lesson['id'], $_SESSION['user_id']));
 
         // レッスン詳細ページ表示
         $this->disp('/Lesson/lessonpage.php');
@@ -41,34 +50,14 @@ class LessonController extends AppController
      */
     public function genreAction()
     {
-        // パラメータの取得
-        $param = $this->getParam();
-
         // パラメータによって表示するページを決める
+        $param = $this->getParam();
         if ($param === false) {
-            $this->notFound();
+            throw new Exception();
         }
-
-        // ジャンルからレッスン情報を抽出
-        $genreObj = new Genre();
-        $lessonObj = new Lesson();
-        $genre = $genreObj->getByUrl($param);
-        $lesson = $lessonObj->getByGenre($genre['id']);
-
-        // 各レッスンの作成者情報を取得
-        $userObj = new User();
-        $user = array();
-        foreach ($lesson as $l) {
-            $user[] = $userObj->getByLesson($l['id']);
-        }
-
-        // 改行を削除
-        Lesson::delBreak($lesson, 'about');
 
         // Viewと共有するデータをセット
-        $this->set('lesson', $lesson);
-        $this->set('user', $user);
-        $this->set('param', $param);
+        $this->set('subject', $param);
 
         // ジャンルページ表示
         $this->disp('/Lesson/genrepage.php');
@@ -89,7 +78,7 @@ class LessonController extends AppController
         if($method !== false && method_exists($this, $method)) {
             $this->$method();
         } else {
-            $this->notFound();
+            throw new Exception();
         }
     }
 
@@ -101,8 +90,10 @@ class LessonController extends AppController
     private function input()
     {
         // ユーザ情報とジャンル情報を取得
-        $user = (new User())->get($_SESSION['user_id']);
-        $genreContent = (new Content())->getAllZipGenreName();
+        $model = new User();
+        $user = $model->get($_SESSION['user_id']);
+        $model = new Content();
+        $genreContent = $model->getAllZipGenreName();
 
         // Viewと共有するデータをセット
         $this->set('user', $user);
@@ -143,19 +134,15 @@ class LessonController extends AppController
         }
 
         // 入力内容をエスケープ
-        $post['lesson_name']  = mysqli_real_escape_string(Controller::escape($post['lesson_name']));
-        $post['lesson_about'] = mysqli_real_escape_string(Controller::escape($post['lesson_about']));
-        $post['lesson_genre'] = $post['lesson_genre'];
-
-        // 改行コードを改行タグに変換
-        $post['lesson_about'] = str_replace(array("\\r\\n", "\\r", "\\n"), "<br>", $post['lesson_about']);
-        $post['lesson_about'] = str_replace("&lt;br&gt;", "<br>", $post['lesson_about']);
+        $model = new Lesson();
+        $post['lesson_name']  = $model->escape($post['lesson_name']);
+        $post['lesson_about'] = $model->escape($post['lesson_about']);
+        $post['lesson_genre'] = intval($post['lesson_genre']);
 
         // 選択された画像が最後にアップロードされたものでない時
         if (isset($_SESSION['fileName']) && $post['lesson_image'] != $_SESSION['fileName']) {
-            if (!(new Lesson())->isUsedImage($_SESSION['fileName'])) {
+            if (!$model->isUsedImage($_SESSION['fileName'])) {
                 // 残っている使われない画像を削除
-                echo "<pre>" . var_dump($_SESSION['fileName']) . '/' . $post['fileName'] . "</pre>";
                 unlink($this->getSysRoot() . "/htdocs/uploads/{$_SESSION['user_id']}/{$_SESSION['fileName']}");
             }
         }
@@ -165,7 +152,7 @@ class LessonController extends AppController
             $post['lesson_image'] = "/uploads/{$_SESSION['user_id']}/{$post['lesson_image']}";
         }
 
-        // 登録情報のセット
+        // 登録
         $data = array('name'       => $post['lesson_name'],
                       'about'      => $post['lesson_about'],
                       'content_id' => $post['lesson_genre'],
@@ -173,27 +160,26 @@ class LessonController extends AppController
                       'created_at' => date('Y-m-d H:i:s'),
                       'user_id'    => $_SESSION['user_id']);
 
-        // 登録実行
-        if((new Lesson)->insert($data)) {
-
-            // 登録成功した時、セッションの保存内容をリセット
-            unset($_SESSION['lesson_name']);
-            unset($_SESSION['lesson_about']);
-            unset($_SESSION['lesson_genre']);
-            unset($_SESSION['fileName']);
-
-            // 登録完了画面表示
-            $this->disp('/Lesson/Register/complete.php');
-        } else {
-            // 登録失敗時
-            echo "なんかしっぱいしてもうたわ";
+        if(!$model->insert($data)) {
+            // 失敗
+            return;
         }
+
+        // 登録成功した時、セッションの保存内容をリセット
+        unset($_SESSION['lesson_name']);
+        unset($_SESSION['lesson_about']);
+        unset($_SESSION['lesson_genre']);
+        unset($_SESSION['fileName']);
+
+        // 登録完了画面表示
+        $this->disp('/Lesson/Register/complete.php');
     }
 
     /**
      * 必須項目の入力チェック
      *
-     * @return boolean
+     * @param  array $post POSTデータ
+     * @return void
      */
     private function checkPostValue($post)
     {
@@ -229,61 +215,53 @@ class LessonController extends AppController
     }
 
     /**
-     * レッスンのコンタクト申請
+     * レッスン編集ページ
      *
      * @return void
      */
-    public function contactAction()
+    public function editAction()
     {
-        //受講者(送信側)の情報を取得
-        $model = new User();
-        $sender = $model->get($_SESSION['user_id']);
-        $lessonId = $this->getIdFromUrl("/[0-9]+/");
-
-        //講師(受信側)のユーザ情報、レッスン情報を取得
-        $recever['user'] = $model->getByLesson($lessonId);
+        // 作成者かどうかを判定
         $model = new Lesson();
-        $recever['lesson'] = $model->get($lessonId);
-
-        //コンタクト履歴を保存
-        date_default_timezone_set('Asia/Tokyo');
-        $model = new Contact();
-        $data = array('lesson_id'    => $lessonId,
-                      'user_id'      => $sender['facebook_id'],
-                      'contacted_at' => date('Y-m-d H:i:s'));
-
-        if(!$model->insert($data)){
-            // エラー
-            exit;
+        $lesson = $model->get($this->getId());
+        if ($_SESSION['user_id'] != $lesson['user_id']) {
+            header("HTTP/1.0 403 Forbidden");
+            return;
         }
+        $lesson['name']  = h($lesson['name']);
+        $lesson['about'] = h($lesson['about']);
 
-        // 宛先アドレス
-        $to = $recever['user']['email'];
-        // 件名
-        $subject = $recever['lesson']['name'] . "の受講申請";
-        // 本文
-        $body = <<<EOT
-{$recever['user']['last_name']}さん、こんにちは！
-Starport運営チームです！
+        // 編集ページ表示
+        $model = new Content();
+        $genreContent = $model->getAllZipGenreName();
+        $this->set('lesson', $lesson);
+        $this->set('genreContent', $genreContent);
+        $this->disp("/Lesson/edit.php");
+    }
 
-{$sender['last_name']}さんがあなたの登録しているレッスン"{$recever['lesson']['name']}"の話を聞きたいと、依頼があります。
-まずは{$sender['last_name']}さんのプロフィールを見てみましょう。
-http://{$_SERVER['HTTP_HOST']}/user/profile/{$sender['facebook_id']}
-
-その後、{$sender['last_name']}さんのプロフィールからFacebookのフレンド依頼をし、Messengerで日時と場所をご相談することをオススメします！
-
-それでは{$sender['last_name']}さんとのお時間を思いっきり楽しんでください！
-
---------------------------------------------
-Starport運営チーム
-このメールアドレスは送信専用です。
-何かありましたらお問い合わせフォームよりご連絡ください。
-お問合せ: http://{$_SERVER['HTTP_HOST']}/info/contact
---------------------------------------------
-EOT;
-        // メール送信
-        (new Mail($to, $subject, $body))->send_mail();
-        "<h2>{$recever['user']['name']}さんにメールが送信されました！</h2>" .
-        "<p>{$recever['user']['name']}さんからFacebookで連絡が来るのを待っていてください。</p>";
+    /**
+     * レッスン編集の確定処理
+     *
+     * @param  integer $id 変更されたレッスンのID
+     * @return void
+     */
+    private function editCommit($id)
+    {
+        // レッスンの作成者かを判定
+        $post = $this->getPost();
+        $model = new Lesson();
+        $lesson = $model->get($id);
+        if ($lesson['user_id'] != $_SESSION['user_id']) {
+            header("HTTP/1.0 403 Forbidden");
+            return;
+        }
+        // エスケープ処理してレッスン更新
+        $post['lesson_name']  = $model->escape($post['lesson_name']);
+        $post['lesson_about'] = $model->escape($post['lesson_about']);
+        $post['lesson_genre'] = intval($post['lesson_genre']);
+        $data = array('name'       => $post['lesson_name'],
+                      'about'      => $post['lesson_about'],
+                      'content_id' => $post['lesson_genre']);
+        $model->update($id, $data);
     }
 }

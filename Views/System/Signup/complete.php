@@ -1,7 +1,7 @@
 <section><!--プロフィール登録-->
     <div class="width412px">
-        <h2>講師登録が完了しました！</h2>' .
-        <p>{$_SESSION['email']}宛に確認メールを送信しました。<br>
+        <h2>講師登録が完了しました！</h2>
+        <p><?= $_SESSION['email'] ?>宛に確認メールを送信しました。<br>
             メールが届かない場合は@starportz.comの<br>ドメイン受信設定を行ってください。<br>
             <a href="/confirm-mail?type=resend" onclick="confirm('確認メールを再送信します。\nよろしいですか？')">確認メールを再送信</a>
         </p><a href="/user/profile/<?= $_SESSION['fb_id'] ?>">マイページへ</a>

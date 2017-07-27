@@ -1,9 +1,3 @@
-<?php
-$popularLesson = $this->get('popularLesson');
-$popularUser = $this->get('popularUser');
-$newLesson = $this->get('newLesson');
-$newUser = $this->get('newUser');
-?>
 <section>
     <!--トップページのヘダー画像-->
     <div id="viewer">
@@ -50,9 +44,9 @@ $newUser = $this->get('newUser');
     </div>
     <div>
         <?php if(!isset($_SESSION['user_id'])){ ?>
-      <a class="resister-teacher register-margin" href="/user/register/">facebookで登録！</a>
+      <a class="resister-teacher register-margin" href="/system/signup/auth/">facebookで登録！</a>
         <?php }else{ ?>
-      <a class="resister-teacher register-margin" href="/lesson/register/">レッスンを作る！</a>
+      <a class="resister-teacher register-margin" href="/lesson/register/input/">レッスンを作る！</a>
         <?php } ?>
     </div>
     <div class="container how-to-wrapper">
@@ -119,9 +113,9 @@ $newUser = $this->get('newUser');
     </div>
     <div>
         <?php if(!isset($_SESSION['user_id'])){ ?>
-      <a class="resister-teacher register-margin" href="/user/register/">facebookで登録！</a>
+      <a class="resister-teacher register-margin" href="/system/signup/auth/">facebookで登録！</a>
         <?php }else{ ?>
-      <a class="resister-teacher register-margin" href="/lesson/register/">レッスンを作る！</a>
+      <a class="resister-teacher register-margin" href="/lesson/register/input/">レッスンを作る！</a>
         <?php } ?>
     </div>
 
@@ -164,59 +158,50 @@ $newUser = $this->get('newUser');
    }
   </style>
 </section>
+<script src="/js/TextOverFlow.js" charset="utf-8"></script>
 <section>
-  <h2>人気講座</h2>
-  <div class="self-container">
-      <?php if(count($popularLesson) > 0) { ?>
-          <?php for ($i = 0; $i < count($popularLesson); $i++) { ?>
-              <div class="profile-wrapper">
-                  <div class="profile-content">
-                      <a href="/lesson/detail/<?= $popularLesson[$i]['id'] ?>/">
-                          <div class="background-images"><!--背景画像-->
-                              <img alt="img" src="<?= $popularLesson[$i]['image'] ?>"/>
-                              <div class="profile-images" ><!--プロフィール画像-->
-                                  <img alt="img" src="<?= $popularUser[$i]['facebook_photo_url'] ?>"/>
-                              </div>
-                              <div class="profile-name" hidden="hidden"><?= $popularUser[$i]['last_name'] . $popularUser[$i]['first_name'] ?></div>
-                          </div>
-                          <div class="profile-text">
-                              <h2><?= $popularLesson[$i]['name'] ?></h2>
-                              <p><?= mb_strimwidth($popularLesson[$i]['about'], 0, 48, '...') ?></p>
-                              <p><?= mb_strimwidth($popularUser[$i]['university'] . '/' . $popularUser[$i]['faculty'], 0, 48, '...') ?></p>
-                          </div>
-                      </a>
-                  </div>
-              </div>
-          <?php } ?>
-      <?php } else { ?>
-          <h2>レッスンがまだないようです</h2>
-      <?php } ?>
-  </div>
-</section>
-<section>
-  <h2>新着講座</h2>
-  <?php if(count($newLesson) > 0) { ?>
-      <?php for ($i = 0; $i < count($newLesson); $i++) { ?>
-          <div class="profile-wrapper">
-              <div class="profile-content">
-                  <a href="/lesson/detail/<?= $newLesson[$i]['id'] ?>/">
-                      <div class="background-images"><!--背景画像-->
-                          <img alt="img" src="<?= $newLesson[$i]['image'] ?>"/>
-                          <div class="profile-images" ><!--プロフィール画像-->
-                              <img alt="img" src="<?= $newUser[$i]['facebook_photo_url'] ?>"/>
-                          </div>
-                          <div class="profile-name" hidden="hidden"><?= $newUser[$i]['last_name'] . $newUser[$i]['first_name'] ?></div>
-                      </div>
-                      <div class="profile-text">
-                          <h2><?= $newLesson[$i]['name'] ?></h2>
-                          <p><?= mb_strimwidth($newLesson[$i]['about'], 0, 48, '...') ?></p>
-                          <p><?= mb_strimwidth($newUser[$i]['university'] . '/' . $newUser[$i]['faculty'], 0, 48, '...') ?></p>
-                      </div>
-                  </a>
-              </div>
-          </div>
-      <?php } ?>
-  <?php } else { ?>
-      <h2>レッスンがまだないようです</h2>
-  <?php } ?>
+    <h2>人気講座</h2>
+    <div class="self-container">
+        <?php for ($i = 0; $i < count($data['pLesson']); $i++) { ?>
+            <div class="profile-wrapper">
+                <div class="profile-content">
+                    <a href="/lesson/detail/<?= $data['pLesson'][$i]['id'] ?>/">
+                        <div class="background-images"><!--背景画像-->
+                            <img alt="img" src="<?= $data['pLesson'][$i]['image'] ?>"/>
+                            <div class="profile-images" ><!--プロフィール画像-->
+                                <img alt="img" src="<?= $data['pUser'][$i]['facebook_photo_url'] ?>"/>
+                            </div>
+                        </div>
+                        <div class="profile-text">
+                            <h2><?= $data['pLesson'][$i]['name'] ?></h2>
+                            <p class="lesson-about"><?= $data['pLesson'][$i]['about'] ?></p>
+                            <div class="separator"></div>
+                            <p class="lesson-university"><?= $data['pUser'][$i]['university'] ?></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        <?php } ?>
+    <h2>新着講座</h2>
+        <?php for ($i = 0; $i < count($data['nLesson']); $i++) { ?>
+            <div class="profile-wrapper">
+                <div class="profile-content">
+                    <a href="/lesson/detail/<?= $data['nLesson'][$i]['id'] ?>/">
+                        <div class="background-images"><!--背景画像-->
+                            <img alt="img" src="<?= $data['nLesson'][$i]['image'] ?>"/>
+                            <div class="profile-images" ><!--プロフィール画像-->
+                                <img alt="img" src="<?= $data['nUser'][$i]['facebook_photo_url'] ?>"/>
+                            </div>
+                        </div>
+                        <div class="profile-text">
+                            <h2><?= $data['nLesson'][$i]['name'] ?></h2>
+                            <p class="lesson-about"><?= $data['nLesson'][$i]['about'] ?></p>
+                            <div class="separator"></div>
+                            <p class="lesson-university"><?= $data['nUser'][$i]['university'] ?></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
 </section>

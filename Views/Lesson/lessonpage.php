@@ -1,34 +1,29 @@
-<?php
-//
-// $lesson[] = レッスンと講師の情報が保存されている連想配列
-// $other_lesson[][] = 同じジャンルのレッスンが人気順に３つ保存されている2次元連想配列
-// $contacted = すでにコンタクトが取られているかがわかる変数、setされていたらコンタクト済である
-//
-$lesson = $this->get('lesson');
-$user = $this->get('user');
-$other = $this->get('other');
-$isContacted = $this->get('isContacted');
-?>
+<script type="text/javascript">
+    var lessonId = <?= json_encode($data['lesson']['id']) ?>;
+    var lessonName = <?= json_encode($data['lesson']['name']) ?>;
+    var userName = <?= json_encode($data['user']['last_name']) ?>;
+</script>
+<script src="/js/ajaxContact.js" charset="utf-8"></script>
 <div class="container-fluid individual-page">
     <div class="row">
         <div class="col-xs-12 col-sm-8 lecture-wrapper">
             <div class="lecture-box"><!--コンテンツのトップ-->
-                <h2 class="lecture-title"><?= $lesson['name'] ?></h2>
+                <h2 class="lecture-title"><?= $data['lesson']['name'] ?></h2>
                 <div class="solid"></div><!--線-->
                 <div class="lecture-image">
-                    <img alt="img" src="<?= $lesson['image'] ?>"/><!--カバー画像取得-->
+                    <img alt="img" src="<?= $data['lesson']['image'] ?>"/><!--カバー画像取得-->
                 </div>
                 <div class="solid"></div>
                 <div>
-                    <?php if(false){ ?>
-                    <a class="resister-teacher register-margin lecture-listen" href="/edit-lesson/?id=<?= $lesson['id'] ?>">内容を編集する</a>
-                    <?php } else if($isContacted) { ?>
+                    <?php if($data['user']['facebook_id'] == $_SESSION['user_id']){ ?>
+                    <a class="resister-teacher register-margin lecture-listen" href="/lesson/edit/<?= $data['lesson']['id'] ?>/">内容を編集する</a>
+                    <?php } else if($data['isContacted']) { ?>
                     <div class="resister-teacher register-margin lecture-listen">申請中</div>
                     <?php } else { ?>
-                    <a class="resister-teacher register-margin lecture-listen" href="/lesson/contact/<?= $lesson['id'] ?>" onclick="return confirm('\n<?= $lesson['name'] ?>の話を聞きますか？\nOKを押すと、<?=$user['last_name']?>さん宛にメールが送信されます。')">聞きたい！</a>
+                    <div id="contact" class="resister-teacher register-margin lecture-listen" href="/ajax/contact/<?= $data['lesson']['id'] ?>/">聞きたい！</div>
                     <?php } ?>
                     <h2 class="lecture-linehight lecture-title">講義について</h2>
-                    <p><?= $lesson['about'] ?></p>
+                    <p><?= $data['lesson']['about'] ?></p>
                 </div>
             </div><!--lecture-box終わり-->
             <!--
@@ -51,22 +46,22 @@ $isContacted = $this->get('isContacted');
         <div class="col-xs-12 col-sm-4 lecture-profile-wrapper">
             <div class="lecture-box">
                 <div class="lecture-profile-image">
-                    <a href="/user/profile/<?= $user['facebook_id'] ?>/"><img alt="img" src="<?= $user['facebook_photo_url'] ?>"/></a><!--プロフィール画像取得-->
+                    <a href="/user/profile/<?= $data['user']['facebook_id'] ?>/"><img alt="img" src="<?= $data['user']['facebook_photo_url'] ?>"/></a><!--プロフィール画像取得-->
                 </div>
-                <h2><a href="/user/profile/<?= $user['facebook_id'] ?>"><?= $user['last_name'] . ' ' . $user['first_name'] ?></a></h2><!--名前を取得-->
-                <p><?= $user['university'] . $user['faculty'] . $user['course'] ?></p>
+                <h2><a href="/user/profile/<?= $data['user']['facebook_id'] ?>"><?= $data['user']['last_name'] . ' ' . $data['user']['first_name'] ?></a></h2><!--名前を取得-->
+                <p><?= $data['user']['university'] . $data['user']['faculty'] . $data['user']['course'] ?></p>
                 <div class="solid"></div>
                 <div id="social-icon-profile">
-                    <div class="social-color-icon"><a href="https://www.facebook.com/<?= $user['facebook_id'] ?>/"><img alt="img" src="/images/facebook.png"/></a></div>
-                    <?php if ($user['twitter'] != "") { ?>
-                        <div class="social-color-icon"><a href="https://www.twitter.com/<?= $user['twitter'] ?>/"><img alt="img" src="/images/twitter.png"/></a></div>
-                    <?php } if ($user['instagram'] != "") { ?>
-                        <div class="social-color-icon"><a href="https://www.instagram.com/<?= $user['instagram'] ?>/"><img  alt="img" src="/images/instagram.png"/></a></div>
+                    <div class="social-color-icon"><a href="https://www.facebook.com/<?= $data['user']['facebook_id'] ?>/"><img alt="img" src="/images/facebook.png"/></a></div>
+                    <?php if ($data['user']['twitter'] != "") { ?>
+                        <div class="social-color-icon"><a href="https://www.twitter.com/<?= $data['user']['twitter'] ?>/"><img alt="img" src="/images/twitter.png"/></a></div>
+                    <?php } if ($data['user']['instagram'] != "") { ?>
+                        <div class="social-color-icon"><a href="https://www.instagram.com/<?= $data['user']['instagram'] ?>/"><img  alt="img" src="/images/instagram.png"/></a></div>
                     <?php } ?>
                 </div>
-            </div><?php if (isset($other)) { ?>
+            </div><?php if (isset($data['other'])) { ?>
                 <div class="row">
-                    <?php foreach ($other as $o) { ?>
+                    <?php foreach ($data['other'] as $o) { ?>
                         <div id="profiles" class="mypage-other-lesson">
                             <div class="col-md-4 col-xs-6 col-xxs-12 profile-wrapper">
                                 <div class="profile-content"><a href="/lesson/detail/<?= $o['id'] ?>/">
