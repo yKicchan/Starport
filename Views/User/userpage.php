@@ -1,4 +1,12 @@
 <!--マイページに書きたいことの見た目ページ-->
+<script src="/js/zipText.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".lesson-about").each(function(){
+            $(this).zipText();
+        });
+    });
+</script>
 <div class="container-fluid individual-page">
     <div class="row">
         <div class="col-xs-12 col-sm-4 lecture-profile-wrapper">
@@ -29,18 +37,20 @@
             <?php if(count($data['lesson']) > 0) { ?>
                 <h3><?= $data['user']['last_name'] ?>さんのレッスン</h3>
                 <div class="row">
-                    <?php foreach ($data['lesson'] as $les){ ?>
+                    <?php foreach ($data['lesson'] as $lesson){ ?>
                         <div id="profiles" class="mypage-other-lesson">
                             <div class="col-md-4 col-xs-6 col-xxs-12 profile-wrapper">
                                 <div class="profile-content">
-                                    <a href="/lesson/detail/<?= $les['id'] ?>/">
+                                    <a href="/lesson/detail/<?= $lesson['id'] ?>/">
                                         <div class="background-images"><!--背景画像-->
-                                            <img alt="img" src="<?= $les['image'] ?>"/>
+                                            <img alt="img" src="<?= $lesson['image'] ?>"/>
                                             <div class="profile-name" hidden="hidden"><?= $data['user']['last_name'] . $data['user']['first_name'] ?></div>
                                         </div><!--背景画像終わり-->
                                         <div class="profile-text">
-                                            <h2><?= $les['name'] ?></h2>
-                                            <p><?= $les['about'] ?></p>
+                                            <h2 class="lesson-name"><?= $lesson['name'] ?></h2>
+                                            <p class="lesson-about"><?= $lesson['about'] ?></p>
+                                            <div class="separator"></div>
+                                            <p class="lesson-university"><?= $data['user']['university'] ?></p>
                                         </div>
                                     </a>
                                 </div>

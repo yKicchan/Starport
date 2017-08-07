@@ -158,7 +158,14 @@
    }
   </style>
 </section>
-<script src="/js/TextOverFlow.js" charset="utf-8"></script>
+<script src="/js/zipText.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(function(){
+    $(".lesson-about").each(function(){
+        $(this).zipText();
+    });
+});
+</script>
 <section>
     <h2>人気講座</h2>
     <div class="self-container">
