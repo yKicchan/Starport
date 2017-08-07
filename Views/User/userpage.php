@@ -40,7 +40,7 @@
                                         </div><!--背景画像終わり-->
                                         <div class="profile-text">
                                             <h2><?= $les['name'] ?></h2>
-                                            <p><?= mb_strimwidth(str_replace("<br>", "", $les['about']), 0, 96, '...') ?></p>
+                                            <p><?= $les['about'] ?></p>
                                         </div>
                                     </a>
                                 </div>

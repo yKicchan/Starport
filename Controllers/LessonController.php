@@ -92,12 +92,11 @@ class LessonController extends AppController
         // ユーザ情報とジャンル情報を取得
         $model = new User();
         $user = $model->get($_SESSION['user_id']);
-        $model = new Content();
-        $genreContent = $model->getAllZipGenreName();
+        $category = $this->getCategory();
 
         // Viewと共有するデータをセット
         $this->set('user', $user);
-        $this->set('genreContent', $genreContent);
+        $this->set('category', $category);
 
         // レッスン情報入力ページ
         $this->disp('/Lesson/Register/input.php');
@@ -226,16 +225,16 @@ class LessonController extends AppController
         $lesson = $model->get($this->getId());
         if ($_SESSION['user_id'] != $lesson['user_id']) {
             header("HTTP/1.0 403 Forbidden");
+            header("Location:/");
             return;
         }
         $lesson['name']  = h($lesson['name']);
         $lesson['about'] = h($lesson['about']);
 
         // 編集ページ表示
-        $model = new Content();
-        $genreContent = $model->getAllZipGenreName();
+        $category = $this->getCategory();
         $this->set('lesson', $lesson);
-        $this->set('genreContent', $genreContent);
+        $this->set('category', $category);
         $this->disp("/Lesson/edit.php");
     }
 

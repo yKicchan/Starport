@@ -33,7 +33,7 @@ class Lesson extends AppModel
     public function get($id)
     {
         $sql = "SELECT * FROM lesson WHERE id = $id";
-        $row = $this->query($sql);
+        $row = $this->find($sql);
         return $row[0];
     }
 
@@ -46,7 +46,7 @@ class Lesson extends AppModel
     public function getByUser($id)
     {
         $sql = "SELECT * FROM lesson, user WHERE user_id = $id AND user_id = facebook_id";
-        return $this->query($sql);
+        return $this->find($sql);
     }
 
     /**
@@ -60,7 +60,7 @@ class Lesson extends AppModel
     public function getByGenre($id, $limit = 20, $offset = 0)
     {
         $sql = "SELECT * FROM lesson WHERE content_id DIV 1000 = $id DIV 1000 LIMIT $limit OFFSET $offset";
-        return $this->query($sql);
+        return $this->find($sql);
     }
 
     /**
@@ -72,7 +72,7 @@ class Lesson extends AppModel
     public function getByContent($id)
     {
         $sql = "SELECT * FROM lesson WHERE content_id = $id";
-        return $this->query($sql);
+        return $this->find($sql);
     }
 
     /**
@@ -84,7 +84,7 @@ class Lesson extends AppModel
     public function getNewLesson($limit = 1)
     {
         $sql = "SELECT * FROM lesson ORDER BY created_at DESC LIMIT $limit";
-        return $this->query($sql);
+        return $this->find($sql);
     }
 
     /**
@@ -96,7 +96,7 @@ class Lesson extends AppModel
     public function getPopularLesson($limit = 1)
     {
         $sql = "SELECT * FROM lesson ORDER BY count DESC LIMIT $limit";
-        return $this->query($sql);
+        return $this->find($sql);
     }
 
     /**
@@ -108,7 +108,7 @@ class Lesson extends AppModel
     public function isUsedImage($fileName)
     {
         $sql = "SELECT id FROM lesson WHERE image = '/uploads/{$_SESSION['user_id']}/$fileName'";
-        $rows = $this->query($sql);
+        $rows = $this->find($sql);
         return count($rows) > 0;
     }
 }

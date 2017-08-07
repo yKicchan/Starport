@@ -13,7 +13,7 @@ class SystemController extends AppController
      *
      * @return void
      */
-    public function SignInAction()
+    public function signInAction()
     {
         // Facebookの初期設定
         $this->setFacebook();

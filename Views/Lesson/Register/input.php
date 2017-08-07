@@ -21,8 +21,8 @@
                 <div class="form-group inline form-padding">
                     <select class="form-control form300" name="lesson_genre">
                         <option name="lessonGenre" value="-1">レッスンのジャンル</option>
-                        <?php foreach ($data['genreContent'] as $genre) { ?>
-                            <option name="lessonGenre" value="<?= $genre['id'] ?>" <?= ($genre['id'] == $_SESSION['lesson_genre']) ? 'selected="ture"' : '' ?>><?= $genre['name'] ?></option>
+                        <?php foreach ($data['category'] as $category) { ?>
+                            <option name="lessonGenre" value="<?= $category['id'] ?>" <?= ($category['id'] == $_SESSION['lesson_genre']) ? 'selected="ture"' : '' ?>><?= $category['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
