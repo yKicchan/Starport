@@ -32,7 +32,7 @@ class AppController extends Controller
 
         // ジャンル情報を取得
         $model = new Genre();
-        $genre = $model->getAll();
+        $genre = $model->get();
         $model = new Content();
         $content = array(array());
         foreach ($genre as $g) {
@@ -127,5 +127,26 @@ class AppController extends Controller
             }
         }
         return false;
+    }
+
+    /**
+     * カテゴリー情報を取得する
+     *
+     * @return array カテゴリー情報
+     */
+    public function getCategory()
+    {
+        // 選択肢が多すぎるので一旦ジャンルだけにする
+        // $model = new Content();
+        // $content = $model->get();
+        // $zipName = $model->getZipName();
+        // $category = array();
+        // for ($i = 0; $i < count($zipName); $i++) {
+        //     $category[$i]['id']   = $content[$i]['id'];
+        //     $category[$i]['name'] = $zipName[$i];
+        // }
+        $model = new Genre();
+        $category = $model->get();
+        return $category;
     }
 }
