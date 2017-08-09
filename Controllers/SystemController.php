@@ -50,6 +50,10 @@ class SystemController extends AppController
      */
     private function login()
     {
+        if (!$this->isAuth()){
+            return;
+        }
+
         // Facebookのユーザ情報を取得
         $response = $this->facebook->get('/me?fields=id', $this->helper->getAccessToken());
         $user = $response->getGraphUser();
@@ -79,6 +83,8 @@ class SystemController extends AppController
      */
     private function auth($action, $param)
     {
+        $_SESSION['auth'] = true;
+
         // リダイレクト先の設定
         $loginUrl = $this->helper->getLoginUrl($this->getHostName() . "/system/{$action}/{$param}/", ['email']);
 
@@ -131,6 +137,10 @@ class SystemController extends AppController
      */
     private function input()
     {
+        if (!isset($_SESSION['data']) && !$this->isAuth()){
+            return;
+        }
+
         // アクセストークン取得
         if (!isset($_SESSION['accessToken'])) {
             $_SESSION['accessToken'] = $this->helper->getAccessToken();
@@ -141,21 +151,22 @@ class SystemController extends AppController
             $photo_url = 'https://graph.facebook.com/' . $user['id'] . '/picture?width=150&height=150';
 
             // セッションにユーザ情報を保存
-            $_SESSION['fb_id'] = $user['id'];
-            $_SESSION['fb_photo_url'] = $photo_url;
-            $_SESSION['first_name'] = $user['first_name'];
-            $_SESSION['last_name'] = $user['last_name'];
-            $_SESSION['email'] = $user['email'];
+            $data = array(
+                'facebook_id'        => $user['id'],
+                'first_name'         => $user['first_name'],
+                'last_name'          => $user['last_name'],
+                'email'              => $user['email'],
+                'facebook_photo_url' => $photo_url);
+            $_SESSION['data'] = $data;
         }
 
         // ユーザ重複確認
-        if ((new User)->isExist($user['id'])) {
+        $model = new User();
+        if ($model->isExist($user['id'])) {
             //すでに会員登録されていたらログインしてマイページに遷移
-            $user_id = $_SESSION['fb_id'];
-            $user_img = $_SESSION['fb_photo_url'];
-            $_SESSION = array();
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['user_img'] = $user_img;
+            unset($_SESSION['data']);
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_img'] = $photo_url;
             header("Location:/user/profile/{$_SESSION['user_id']}");
             return;
         }
@@ -177,12 +188,11 @@ class SystemController extends AppController
         }
 
         // 必須項目の入力チェック
-        if ((!isset($post['last_name']) || $post['last_name'] == '') ||
-                (!isset($post['first_name']) || $post['first_name'] == '') ||
-                (!isset($post['email']) || $post['email'] == '') ||
-                (!isset($post['university']) || $post['university'] == '') ||
-                (!isset($post['faculty']) || $post['faculty'] == '') ||
-                (!isset($post['introduction']) || $post['introduction'] == '')) {
+        $data = $post['data'];
+        if ((!isset($data['last_name']) || $data['last_name'] == '') ||
+            (!isset($data['first_name']) || $data['first_name'] == '') ||
+            (!isset($data['email']) || $data['email'] == '') ||
+            (!isset($data['university']) || $data['university'] == '')) {
             $msg = "<h3><font color='red'>必須項目を入力してください！</font></h3>";
 
             // 利用規約同意チェック
@@ -190,14 +200,12 @@ class SystemController extends AppController
             $msg = "<h3><font color='red'>利用規約に同意してください！</font></h3>";
 
             // メールアドレスの正規表現チェック
-        } else if (!preg_match("/^[0-9a-zA-Z_\.\-]+@[0-9a-zA-Z_\-]+\.[0-9a-zA-Z_\.\-]+$/", $post['email'])) {
+        } else if (!preg_match("/^[0-9a-zA-Z_\.\-]+@[0-9a-zA-Z_\-]+\.[0-9a-zA-Z_\.\-]+$/", $data['email'])) {
             $msg = "<h3><font color='red'>正しくメールアドレスを入力してください！</font></h3>";
         }
-
-        // 入力内容をエスケープ
-        $model = new AppModel();
-        foreach ($post as $key => $val) {
-            $_SESSION[$key] = $model->escape($val);
+        // セッションのデータを更新
+        foreach ($data as $key => $val) {
+            $_SESSION['data'][$key] = $val;
         }
 
         // 入力内容に不備があった場合再度入力画面表示
@@ -217,30 +225,27 @@ class SystemController extends AppController
      */
     private function complete()
     {
-        // Facebook連携チェック
-        if ($_SESSION['fb_id'] == '' || !isset($_SESSION['fb_id'])) {
+        if (!isset($_SESSION['data'])) {
+            header("Location:/");
+        }
+        // 入力情報取得
+        $data = $_SESSION['data'];
+        unset($_SESSION['data']);
+
+        // 登録実行
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $model = new User();
+        foreach ($data as &$val) {
+            $val = $model->escape($val);
+        }
+        unset($val);
+        if (!$model->insert($data)) {
             header("Location:/");
             return;
         }
-        // 登録
-        $data = array('facebook_id' => $_SESSION['fb_id'],
-                      'last_name'   => $_SESSION['last_name'],
-                      'first_name'  => $_SESSION['first_name'],
-                      'email'       => $_SESSION['email'],
-                      'university'  => $_SESSION['university'],
-                      'faculty'     => $_SESSION['faculty'],
-                      'course'      => $_SESSION['course'],
-                      'phrase'      => $_SESSION['phrase'],
-                      'introduction'=> $_SESSION['introduction'],
-                      'twitter'     => $_SESSION['twitter'],
-                      'instagram'   => $_SESSION['instagram'],
-                      'created_at'  => date('Y-m-d H:i:s'),
-                      'facebook_photo_url' => $_SESSION['fb_photo_url']);
 
-        if (!(new User)->insert($data)) {
-        }
         // 登録確認メール送信
-        $to = $_SESSION['email'];
+        $to = $data['email'];
         $subject = "Starportcomへようこそ！";
         $host = $this->getHostName();
         $body = <<<EOT
@@ -265,14 +270,22 @@ Starport運営チーム
 ---------------------------------------------
 EOT;
         $mail = new Mail($to, $subject, $body);
-        $mail->sendMail("/Signup/{$_SESSION['fb_id']}.txt");
+        $mail->sendMail("/Signup/{$data['facebook_id']}.txt");
 
         // ユーザIDとプロフ画像をセッションに保存
-        $user_id = $_SESSION['fb_id'];
-        $image = $_SESSION['fb_photo_url'];
-        $_SESSION = array();
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['user_img'] = $image;
+        $_SESSION['user_id'] = $data['facebook_id'];
+        $_SESSION['user_img'] = $data['facebook_photo_url'];
         $this->disp('/System/Signup/complete.php');
+    }
+
+    private function isAuth()
+    {
+        if (isset($_SESSION['auth'])) {
+            unset($_SESSION['auth']);
+            return true;
+        } else {
+            header("Location:/");
+            return false;
+        }
     }
 }

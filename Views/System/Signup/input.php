@@ -2,44 +2,44 @@
     <div class="width412px">
         <h2>プロフィール登録</h2>
         <div class="row">
-            <img src="<?= $_SESSION['fb_photo_url'] ?>">
+            <img src="<?= $_SESSION['data']['facebook_photo_url'] ?>">
         </div>
         <form method="post" action="/system/signup/confirm">
             <!-- エラーメッセージ -->
             <caption><?= $data['msg'] ?></caption>
             <div class="form-group inline">
-                <input type="text" class="form-control form148" name="last_name" placeholder="姓(必須)" value="<?= $_SESSION['last_name'] ?>"　required>
+                <input type="text" class="form-control form148" name="data[last_name]" placeholder="姓(必須)" value="<?= $_SESSION['data']['last_name'] ?>"　required>
             </div>
             <div class="form-group inline">
-                <input type="text" class="form-control form148" name="first_name" placeholder="名(必須)" value="<?= $_SESSION['first_name'] ?>"　required>
+                <input type="text" class="form-control form148" name="data[first_name]" placeholder="名(必須)" value="<?= $_SESSION['data']['first_name'] ?>"　required>
             </div>
             <div class="form-group inline">
-                <input type="email" class="form-control form300" name="email" placeholder="Eメール(必須)" value="<?= $_SESSION['email'] ?>" required>
+                <input type="email" class="form-control form300" name="data[email]" placeholder="Eメール(必須)" value="<?= $_SESSION['data']['email'] ?>" required>
             </div>
             <div class="form-group inline">
-                <input type="text" class="form-control form300" name="university" placeholder="大学(必須)" value="<?= $_SESSION['university'] ?>" required>
+                <input type="text" class="form-control form300" name="data[university]" placeholder="大学(必須)" value="<?= $_SESSION['data']['university'] ?>" required>
             </div>
             <div class="form-group inline">
-                <input type="text" class="form-control form148" name="faculty" placeholder="学部(必須)" value="<?= $_SESSION['faculty'] ?>"　required>
+                <input type="text" class="form-control form148" name="data[faculty]" placeholder="学部(必須)" value="<?= $_SESSION['data']['faculty'] ?>">
             </div>
             <div class="form-group inline">
-                <input type="text" class="form-control form148" name="course" placeholder="学科(任意)" value="<?= $_SESSION['course'] ?>">
+                <input type="text" class="form-control form148" name="data[course]" placeholder="学科(任意)" value="<?= $_SESSION['data']['course'] ?>">
             </div>
             <div class="form-group inline">
                 自己紹介文（必須）
-                <textarea class="form-control form300" name="introduction" placeholder="例：テニスサークル○○所属、特技は筋トレ、趣味は映画鑑賞など" required><?= $_SESSION['introduction'] ?></textarea>
+                <textarea class="form-control form300" name="data[introduction]" placeholder="例：テニスサークル○○所属、特技は筋トレ、趣味は映画鑑賞など" ><?= $_SESSION['data']['introduction'] ?></textarea>
             </div>
             <div class="form-group inline">
                 キャッチフレーズ(30字以内任意)
-                <input type="text" class="form-control form300" name="phrase" placeholder="例：stay foolish, stay hungry." maxlength="30" value="<?= $_SESSION['phrase'] ?>">
+                <input type="text" class="form-control form300" name="data[phrase]" placeholder="例：stay foolish, stay hungry." maxlength="30" value="<?= $_SESSION['data']['phrase'] ?>">
             </div>
             <div class="form-group inline">
                 Twitter ID(任意)
-                <input type="text" class="form-control form300" name="twitter" placeholder="例:starportcom(@以降)" value="<?= $_SESSION['twitter'] ?>">
+                <input type="text" class="form-control form300" name="data[twitter]" placeholder="例:starportcom(@以降)" value="<?= $_SESSION['data']['twitter'] ?>">
             </div>
             <div class="form-group inline">
                 Instagram ID(任意)
-                <input type="text" class="form-control form300" name="instagram" placeholder="例:starportcom" value="<?= $_SESSION['instagram'] ?>">
+                <input type="text" class="form-control form300" name="data[instagram]" placeholder="例:starportcom" value="<?= $_SESSION['data']['instagram'] ?>">
             </div>
             <div class="form-group inline form300">
                 <input type="checkbox" name="confirmation" required><a href="/info/terms">利用規約</a>と<a href="/info/privacy">プライバシーポリシー</a>に同意する。

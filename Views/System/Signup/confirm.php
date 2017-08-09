@@ -4,37 +4,37 @@
     <h2>ユーザー登録確認画面</h2>
     <h3 class="confirm-title">プロフィール画像</h3>
     <div class="lecture-profile-image">
-        <img alt="img" src="<?= $_SESSION['fb_photo_url'] ?>"/><!--プロフィール画像取得-->
+        <img alt="img" src="<?= $_SESSION['data']['facebook_photo_url'] ?>"/><!--プロフィール画像取得-->
     </div>
     <div class="confirm-content">
         <h3 class="confirm-title">姓</h3>
-        <p><?= $_SESSION['last_name'] ?></p><!--姓-->
+        <p><?= $_SESSION['data']['last_name'] ?></p><!--姓-->
         <div class="solid"></div>
         <h3 class="confirm-title">名</h3>
-        <p><?= $_SESSION['first_name'] ?></p><!--名-->
+        <p><?= $_SESSION['data']['first_name'] ?></p><!--名-->
         <div class="solid"></div>
         <h3 class="confirm-title">Eメール</h3>
-        <p><?= $_SESSION['email'] ?></p><!--Eメール-->
+        <p><?= $_SESSION['data']['email'] ?></p><!--Eメール-->
         <h3 class="confirm-title">大学</h3>
-        <p><?= $_SESSION['university'] ?></p><!--大学名-->
+        <p><?= $_SESSION['data']['university'] ?></p><!--大学名-->
         <div class="solid"></div>
         <h3 class="confirm-title">学部</h3>
-        <p><?= $_SESSION['faculty'] ?></p><!--学部-->
+        <p><?= $_SESSION['data']['faculty'] ?></p><!--学部-->
         <div class="solid"></div>
         <h3 class="confirm-title">学科</h3>
-        <p><?= $_SESSION['course'] ?></p><!--学科-->
+        <p><?= $_SESSION['data']['course'] ?></p><!--学科-->
         <div class="solid"></div>
         <h3 class="confirm-title">自己紹介文</h3>
-        <p><?= $_SESSION['introduction'] ?></p><!--自己紹介文-->
+        <p><?= $_SESSION['data']['introduction'] ?></p><!--自己紹介文-->
         <div class="solid"></div>
         <h3 class="confirm-title">キャッチフレーズ</h3>
-        <p><?= $_SESSION['phrase'] ?></p><!--キャッチフレーズ-->
+        <p><?= $_SESSION['data']['phrase'] ?></p><!--キャッチフレーズ-->
         <div class="solid"></div>
         <h3 class="confirm-title">TwitterID</h3>
-        <p><?= $_SESSION['twitter'] ?></p><!--TwitterID-->
+        <p><?= $_SESSION['data']['twitter'] ?></p><!--TwitterID-->
         <div class="solid"></div>
         <h3 class="confirm-title">InstagramID</h3>
-        <p><?= $_SESSION['instagram'] ?></p><!--InstagramID-->
+        <p><?= $_SESSION['data']['instagram'] ?></p><!--InstagramID-->
         <div class="solid"></div>
     </div>
     <a class="confirm-button bg-ffcdd2" href="/system/signup/input">戻る</a>
