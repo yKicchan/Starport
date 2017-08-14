@@ -357,8 +357,17 @@ form {
 .bg-ef5350{background: #EF5350;}
 .bg-ffcdd2{background: #FFCDD2;}
 .confirm{text-align: center;}
-.confirm-content{text-align: left;}
-.confirm-title{text-align: left;}
+.confirm-content{
+    text-align: left;
+}
+.confirm-content p{
+    color: #5e5e5e;
+    margin-left: 10px;
+}
+.confirm-title{
+    text-align: left;
+    font-weight: bold;
+}
 .confirm-padding{padding-top: 6px;}
 .lecture-wrapper{
     padding:10px;
@@ -872,3 +881,171 @@ figure.profile-figure{
     text-align: right;
     color: #ff0000;
 }
+
+/**
+ * 会員登録UI
+ */
+ .step-group{
+     display: inline-block;
+     width: 100%;
+     height: 50px;
+     margin: 0px auto;
+     margin-bottom: 10px;
+     color: #7e7e7e;
+ }
+ .step{
+     height: 100%;
+     width: 29%;
+     display: inline-block;
+ }
+ .step.selected{
+     color: #ff6e6e;
+ }
+ .step-no{
+     font-size: 15px;
+     padding-bottom: 2px;
+     border-bottom: 2px solid;
+ }
+ .step-title{
+     font-size: 10px;
+     margin-top: 3px;
+ }
+ .step-next{
+     position: relative;
+     display: inline-block;
+     top: 2px;
+     margin: auto 3px;
+     height: 100%;
+     width: 10px;
+     vertical-align: middle;
+ }
+ .form-label{
+     text-align: left;
+     font-weight: bold;
+     margin: 2px 0;
+ }
+ .form-required{
+     display: inline-block;
+     width: 27px;
+     background-color: #f00;
+     color: #fff;
+     text-align: center;
+     font-size: 10px;
+     position: relative;
+     top: -2px;
+     margin: 3px;
+     font-weight: lighter;
+ }
+ .form-optional{
+     display: inline-block;
+     width: 27px;
+     background-color: #09f;
+     color: #fff;
+     text-align: center;
+     font-size: 10px;
+     position: relative;
+     top: -2px;
+     margin: 2px 5px;
+     font-weight: lighter;
+ }
+ .icon{
+     width: 100px !important;
+     border-radius: 50px !important;
+     margin: 7px auto;
+ }
+ textarea{
+     height: 200px !important;
+ }
+
+/**
+ * チェックボックス
+ */
+input[type="checkbox"] {
+    display: none;
+}
+label {
+    position: relative;
+    display: inline-block;
+    padding: 3px 3px 3px 22px;
+    font-weight: normal;
+    cursor: pointer;
+    -webkit-transition: all .2s;
+    transition: all .2s;
+}
+label::before,
+label::after {
+    position: absolute;
+    content: '';
+    -webkit-transition: all .2s;
+    transition: all .2s;
+}
+label::before {
+    top: 50%;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: -8px;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+label::after {
+    opacity: 0;
+    top: 50%;
+    left: 3px;
+    width: 8px;
+    height: 4px;
+    margin-top: -4px;
+    border-left: 2px solid #ff6e6e;
+    border-bottom: 2px solid #ff6e6e;
+    -webkit-transform: rotate(-45deg) scale(.5);
+    transform: rotate(-45deg) scale(.5);
+}
+label:hover::before {
+    background: #fff;
+}
+input[type="checkbox"]:checked + label::before {
+    background: #fff;
+    border: 1px solid #ff6e6e;
+}
+input[type="checkbox"]:checked + label::after {
+    opacity: 1;
+    -webkit-transform: rotate(-45deg) scale(1);
+    transform: rotate(-45deg) scale(1);
+}
+
+/**
+ * バリデーションエラーメッセージ
+ */
+ .msg {
+     font-size: 0.8em;
+ 	position: absolute;
+     top: -2.7em;
+ 	left: 5px;
+ 	padding: .5em 1em .4em;
+ 	background-color: #ff8989;
+ 	border: 1px solid #ff3333;
+ 	border-radius: 7px;
+ 	color: #fff;
+ }
+ .msg:after,
+ .msg:before {
+ 	content: '';
+ 	position: absolute;
+ 	top: 100%;
+ 	left: 15px;
+ 	border: solid transparent;
+ }
+ .msg:after {
+ 	margin-left: 1px;
+ 	border-top-color: #ff8989;
+ 	border-width: 7px;
+ }
+ .msg:before {
+ 	border-top-color: #ff2222;
+ 	border-width: 8px;
+ }
+ /* エラーメッセージを表示するところ */
+ .agree{
+     position: relative;
+ }

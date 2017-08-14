@@ -109,6 +109,7 @@ class SystemController extends AppController
 
     /**
      * ユーザ登録ページ
+     *
      * @return void
      */
     public function signUpAction()
@@ -121,7 +122,7 @@ class SystemController extends AppController
         // パラメータによって表示するページを決める
         if($method !== false && method_exists($this, $method)) {
             if ($method == "auth") {
-                $this->$method('signup', 'input');
+                $this->$method('signup', 'step01');
             } else{
                 $this->$method();
             }
@@ -131,11 +132,11 @@ class SystemController extends AppController
     }
 
     /**
-     * 情報入力画面
+     * プロフィール情報入力
      *
      * @return void
      */
-    private function input()
+    private function step01()
     {
         if (!isset($_SESSION['data']) && !$this->isAuth()){
             return;
@@ -170,63 +171,42 @@ class SystemController extends AppController
             header("Location:/user/profile/{$_SESSION['user_id']}");
             return;
         }
-        $this->disp('/System/Signup/input.php');
+        $this->disp('/System/Signup/step01.php');
     }
 
     /**
-     * 入力情報確認画面
+     * 入力情報の確認
      *
      * @return void
      */
-    private function confirm()
+    private function step02()
     {
-        // 不正アクセス対策
         $post = $this->getPost();
-        if (!isset($post['submit'])) {
+        if (!isset($post['submit']) && !isset($_SESSION['data']['facebook_id'])) {
             header("Location:/");
             return;
         }
 
-        // 必須項目の入力チェック
-        $data = $post['data'];
-        if ((!isset($data['last_name']) || $data['last_name'] == '') ||
-            (!isset($data['first_name']) || $data['first_name'] == '') ||
-            (!isset($data['email']) || $data['email'] == '') ||
-            (!isset($data['university']) || $data['university'] == '')) {
-            $msg = "<h3><font color='red'>必須項目を入力してください！</font></h3>";
-
-            // 利用規約同意チェック
-        } else if (!isset($post['confirmation'])) {
-            $msg = "<h3><font color='red'>利用規約に同意してください！</font></h3>";
-
-            // メールアドレスの正規表現チェック
-        } else if (!preg_match("/^[0-9a-zA-Z_\.\-]+@[0-9a-zA-Z_\-]+\.[0-9a-zA-Z_\.\-]+$/", $data['email'])) {
-            $msg = "<h3><font color='red'>正しくメールアドレスを入力してください！</font></h3>";
+        // セッションに入力内容を保存
+        if (isset($post['submit'])) {
+            foreach ($post['data'] as $key => $val) {
+                $_SESSION['data'][$key] = $val;
+            }
         }
-        // セッションのデータを更新
-        foreach ($data as $key => $val) {
-            $_SESSION['data'][$key] = $val;
-        }
-
-        // 入力内容に不備があった場合再度入力画面表示
-        if (isset($msg)) {
-            $this->set('msg', $msg);
-            $this->disp('/System/Signup/input.php');
-        } else {
-            // 入力内容に不備がなかった場合登録内容確認画面表示
-            $this->disp('/System/Signup/confirm.php');
-        }
+        $this->disp('/System/Signup/step02.php');
     }
 
     /**
-     * 登録完了画面
+     * 登録完了
      *
      * @return void
      */
-    private function complete()
+    private function step03()
     {
-        if (!isset($_SESSION['data'])) {
+        $post = $this->getPost();
+        if (!isset($post['submit']) && !isset($_SESSION['data']['facebook_id'])) {
             header("Location:/");
+            return;
         }
         // 入力情報取得
         $data = $_SESSION['data'];
@@ -235,10 +215,13 @@ class SystemController extends AppController
         // 登録実行
         $data['created_at'] = date('Y-m-d H:i:s');
         $model = new User();
-        foreach ($data as &$val) {
-            $val = $model->escape($val);
+        foreach ($data as $key => $val) {
+            if (empty($val)) {
+                unset($data[$key]);
+            } else {
+                $data[$key] = $model->escape($val);
+            }
         }
-        unset($val);
         if (!$model->insert($data)) {
             header("Location:/");
             return;
@@ -275,9 +258,16 @@ EOT;
         // ユーザIDとプロフ画像をセッションに保存
         $_SESSION['user_id'] = $data['facebook_id'];
         $_SESSION['user_img'] = $data['facebook_photo_url'];
-        $this->disp('/System/Signup/complete.php');
+
+        $this->set('email', $data['email']);
+        $this->disp('/System/Signup/step03.php');
     }
 
+    /**
+     * Facebook認証されてきたかどうか
+     *
+     * @return boolean 認証されてきたらtrue
+     */
     private function isAuth()
     {
         if (isset($_SESSION['auth'])) {
