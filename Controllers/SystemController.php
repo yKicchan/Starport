@@ -72,7 +72,8 @@ class SystemController extends AppController
             header("Location:" . $url);
             return;
         } else {
-            $this->disp('/System/pleaseSignup.html');
+            // $this->disp('/System/pleaseSignup.html');
+            header("Location:/system/signup/auth");
         }
     }
 
