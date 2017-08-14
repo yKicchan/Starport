@@ -3,25 +3,21 @@
         <h2>プロフィール情報の入力</h2>
         <div class="step-group">
             <div class="step selected">
-                <div class="step-no">1</div>
+                <div class="step-no">Step 01.</div>
                 <div class="step-title">プロフィール情報の入力</div>
             </div>
             <div class="step-next">&gt;</div>
             <div class="step">
-                <div class="step-no">2</div>
+                <div class="step-no">Step 02.</div>
                 <div class="step-title">登録情報の確認</div>
             </div>
             <div class="step-next">&gt;</div>
             <div class="step">
-                <div class="step-no">3</div>
+                <div class="step-no">Step 03.</div>
                 <div class="step-title">登録完了</div>
             </div>
         </div>
         <form method="post" action="/system/signup/step02">
-            <div class="form-group">
-                <div class="form-label">アイコン</div>
-                <img class="icon" src="<?= $_SESSION['data']['facebook_photo_url'] ?>">
-            </div>
             <div class="form-group">
                 <div class="form-label">氏名<div class="form-required">必須</div></div>
                 <div class="inline">

@@ -3,25 +3,22 @@
         <h2>登録情報の確認</h2>
         <div class="step-group">
             <div class="step">
-                <div class="step-no">1</div>
+                <div class="step-no">Step 01.</div>
                 <div class="step-title">プロフィール情報の入力</div>
             </div>
             <div class="step-next">&gt;</div>
             <div class="step selected">
-                <div class="step-no">2</div>
+                <div class="step-no">Step 02.</div>
                 <div class="step-title">登録情報の確認</div>
             </div>
             <div class="step-next">&gt;</div>
             <div class="step">
-                <div class="step-no">3</div>
+                <div class="step-no">Step 03.</div>
                 <div class="step-title">登録完了</div>
             </div>
         </div>
         <div class="pages confirm">
             <div class="confirm-content">
-                <h3 class="confirm-title">アイコン</h3>
-                <img class="icon" alt="img" src="<?= $_SESSION['data']['facebook_photo_url'] ?>"/><!--プロフィール画像-->
-                <div class="solid"></div>
                 <h3 class="confirm-title">氏名</h3>
                 <p><?= $_SESSION['data']['last_name'].$_SESSION['data']['first_name'] ?></p><!--名-->
                 <div class="solid"></div>

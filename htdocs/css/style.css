@@ -892,19 +892,23 @@ figure.profile-figure{
      margin: 0px auto;
      margin-bottom: 10px;
      color: #7e7e7e;
+     background-color: #fcfcfc;
+     border-radius: 15px;
+     padding: 0px 15px;
  }
  .step{
      height: 100%;
-     width: 29%;
+     width: 30%;
      display: inline-block;
  }
  .step.selected{
      color: #ff6e6e;
  }
  .step-no{
-     font-size: 15px;
+     font-size: 13px;
      padding-bottom: 2px;
      border-bottom: 2px solid;
+     padding-top: 5px;
  }
  .step-title{
      font-size: 10px;
@@ -914,9 +918,8 @@ figure.profile-figure{
      position: relative;
      display: inline-block;
      top: 2px;
-     margin: auto 3px;
+     margin: auto 1px;
      height: 100%;
-     width: 10px;
      vertical-align: middle;
  }
  .form-label{

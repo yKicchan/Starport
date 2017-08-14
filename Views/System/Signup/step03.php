@@ -3,17 +3,17 @@
         <h2>講師登録が完了しました！</h2>
         <div class="step-group">
             <div class="step">
-                <div class="step-no">1</div>
+                <div class="step-no">Step 01.</div>
                 <div class="step-title">プロフィール入力</div>
             </div>
             <div class="step-next">&gt;</div>
             <div class="step">
-                <div class="step-no">2</div>
+                <div class="step-no">Step 02.</div>
                 <div class="step-title">登録情報の確認</div>
             </div>
             <div class="step-next">&gt;</div>
             <div class="step selected">
-                <div class="step-no">3</div>
+                <div class="step-no">Step 03.</div>
                 <div class="step-title">登録完了</div>
             </div>
         </div>
