@@ -6,12 +6,12 @@
                 <div class="step-no">Step 01.</div>
                 <div class="step-title">プロフィール入力</div>
             </div>
-            <div class="step-next">&gt;</div>
+            <div class="step-next">▲</div>
             <div class="step">
                 <div class="step-no">Step 02.</div>
                 <div class="step-title">登録情報の確認</div>
             </div>
-            <div class="step-next">&gt;</div>
+            <div class="step-next">▲</div>
             <div class="step selected">
                 <div class="step-no">Step 03.</div>
                 <div class="step-title">登録完了</div>

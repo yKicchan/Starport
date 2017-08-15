@@ -917,10 +917,10 @@ figure.profile-figure{
  .step-next{
      position: relative;
      display: inline-block;
-     top: 2px;
-     margin: auto 1px;
-     height: 100%;
+     top: -11px;
      vertical-align: middle;
+     font-size: 11px;
+     transform: rotate(90deg);
  }
  .form-label{
      text-align: left;
