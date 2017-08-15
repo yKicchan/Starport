@@ -19,8 +19,12 @@ class User extends AppModel
     public function update($id, $data)
     {
         $substitution = array();
-        foreach ($data as $key => $value) {
-            $substitution[] = "$key='$value'";
+        foreach ($data as $key => $val) {
+            if (empty($val)) {
+                $substitution[] = "$key = NULL";
+            } else {
+                $substitution[] = "$key = '$val'";
+            }
         }
         $set = implode(',', $substitution);
         $sql = "UPDATE `user` SET $set WHERE `facebook_id` = '$id'";
