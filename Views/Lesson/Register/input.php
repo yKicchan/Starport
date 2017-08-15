@@ -1,6 +1,5 @@
-<link rel="stylesheet" href="/css/radio.css">
-<script src="/js/img_list.js" charset="utf-8"></script>
-<script src="/js/img_click.js" charset="utf-8"></script>
+<script src="/js/imgList.js" charset="utf-8"></script>
+<script src="/js/imgClick.js" charset="utf-8"></script>
 <script src="/js/upload.js" charset="utf-8"></script>
 <script src="/js/lessonPreview.js" charset="utf-8"></script>
 <div id="status">
@@ -40,7 +39,6 @@
                     </div>
                     <div class="cover_group">
                         <section id="default_cover" class="cover">
-                            <link rel="stylesheet" href="/css/img_list.css">
                             <ul id="img_list">
                                 <?php for ($i = 1; $i <= 24; $i++) { ?>
                                     <li class="img">
