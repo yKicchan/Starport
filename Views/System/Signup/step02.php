@@ -1,3 +1,4 @@
+<script src="/js/breakawayConfirm.js"></script>
 <section><!--プロフィール登録-->
     <div class="width412px">
         <h2>登録情報の確認</h2>
