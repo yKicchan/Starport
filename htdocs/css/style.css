@@ -966,7 +966,7 @@ figure.profile-figure{
 input[type="checkbox"] {
     display: none;
 }
-label {
+.check-label {
     position: relative;
     display: inline-block;
     padding: 3px 3px 3px 22px;
@@ -975,14 +975,14 @@ label {
     -webkit-transition: all .2s;
     transition: all .2s;
 }
-label::before,
-label::after {
+.check-label::before,
+.check-label::after {
     position: absolute;
     content: '';
     -webkit-transition: all .2s;
     transition: all .2s;
 }
-label::before {
+.check-label::before {
     top: 50%;
     left: 0;
     width: 14px;
@@ -992,7 +992,7 @@ label::before {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
-label::after {
+.check-label::after {
     opacity: 0;
     top: 50%;
     left: 3px;
@@ -1004,14 +1004,14 @@ label::after {
     -webkit-transform: rotate(-45deg) scale(.5);
     transform: rotate(-45deg) scale(.5);
 }
-label:hover::before {
+.check-label:hover::before {
     background: #fff;
 }
-input[type="checkbox"]:checked + label::before {
+input[type="checkbox"]:checked + .check-label::before {
     background: #fff;
     border: 1px solid #ff6e6e;
 }
-input[type="checkbox"]:checked + label::after {
+input[type="checkbox"]:checked + .check-label::after {
     opacity: 1;
     -webkit-transform: rotate(-45deg) scale(1);
     transform: rotate(-45deg) scale(1);
