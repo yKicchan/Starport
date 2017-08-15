@@ -27,15 +27,11 @@
                 </div>
                 <div class="form-group inline form300 form-padding">
                     <span id="helpBlock" class="help-block left">※レッスンカバー画像（JPEGのみ、最大2MB）</span>
-                    <div class="radio_group">
-                        <label class="label-radio">
-                            <input type="radio" name="cover" value="default" checked="true"/>
-                            <span class="lever">選ぶ</span>
-                        </label>
-                        <label class="label-radio">
-                            <input type="radio" name="cover" value="custom" />
-                            <span class="lever">アップ</span>
-                        </label>
+                    <div class="radio-group">
+                        <input type="radio" name="cover" value="default" checked="true" id="default" />
+                        <label for="default">選択</label>
+                        <input type="radio" name="cover" value="custom" id="custom" />
+                        <label for="custom">アップ</label>
                     </div>
                     <div class="cover_group">
                         <section id="default_cover" class="cover">

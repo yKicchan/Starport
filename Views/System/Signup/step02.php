@@ -1,4 +1,3 @@
-<script src="/js/breakawayConfirm.js"></script>
 <section><!--プロフィール登録-->
     <div class="width412px">
         <h2>登録情報の確認</h2>
@@ -43,7 +42,7 @@
             <form method="post" action="/system/signup/step03">
                 <div class="form-group agree">
                     <input type="checkbox" id="agree" required />
-                    <label for="agree"><a href="/info/terms">利用規約</a>と<a href="/info/privacy">プライバシーポリシー</a>に同意する。</label>
+                    <label class="check-label" for="agree"><a href="/info/terms">利用規約</a>と<a href="/info/privacy">プライバシーポリシー</a>に同意する。</label>
                 </div>
                 <div class="form-group">
                     <a class="btn btn-default" href="/system/signup/step01">戻る</a>

@@ -966,7 +966,7 @@ figure.profile-figure{
 input[type="checkbox"] {
     display: none;
 }
-label {
+.check-label {
     position: relative;
     display: inline-block;
     padding: 3px 3px 3px 22px;
@@ -975,14 +975,14 @@ label {
     -webkit-transition: all .2s;
     transition: all .2s;
 }
-label::before,
-label::after {
+.check-label::before,
+.check-label::after {
     position: absolute;
     content: '';
     -webkit-transition: all .2s;
     transition: all .2s;
 }
-label::before {
+.check-label::before {
     top: 50%;
     left: 0;
     width: 14px;
@@ -992,7 +992,7 @@ label::before {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
-label::after {
+.check-label::after {
     opacity: 0;
     top: 50%;
     left: 3px;
@@ -1004,14 +1004,14 @@ label::after {
     -webkit-transform: rotate(-45deg) scale(.5);
     transform: rotate(-45deg) scale(.5);
 }
-label:hover::before {
+.check-label:hover::before {
     background: #fff;
 }
-input[type="checkbox"]:checked + label::before {
+input[type="checkbox"]:checked + .check-label::before {
     background: #fff;
     border: 1px solid #ff6e6e;
 }
-input[type="checkbox"]:checked + label::after {
+input[type="checkbox"]:checked + .check-label::after {
     opacity: 1;
     -webkit-transform: rotate(-45deg) scale(1);
     transform: rotate(-45deg) scale(1);
@@ -1088,78 +1088,34 @@ input[type="checkbox"]:checked + label::after {
  /**
  * ラジオボタン
  */
- .radio-group {
-     -webkit-user-select: none;
+ .radio-group input[type=radio]{
+   display: none;
  }
- .radio-group label {
-     margin-top: 10px;
-     margin-bottom: 10px;
-     margin-right: 20px;
-     display: inline-block;
+ .radio-group input[type=radio] + label{
+   padding-left: 20px;
+   position:relative;
+   margin: 0 15px;
+   font-weight: normal;
  }
- .label-radio input[type="radio"]{
-     display: none;
+ .radio-group input[type=radio] + label::before{
+   content: "";
+   display: block;
+   position: absolute;
+   top: 1px;
+   left: 1px;
+   width: 15px;
+   height: 15px;
+   border: 1px solid #8e8e8e;
+   border-radius: 50%;
  }
- .label-radio{
-     cursor: pointer;
-     font-weight: normal;
-     letter-spacing: 0;
-     display: inline-block;
-     position: relative;
-     margin-right: 20px;
- }
- .label-radio .lever:before{
-     content:'';
-     border: 1px solid #ddd;
-     width: 20px;
-     height: 20px;
-     margin-right: 10px;
-     display: inline-block;
-     vertical-align: middle;
-     border-radius:10px;
-     -webkit-transition: all 800ms cubic-bezier(1, 0, 0, 1);
-     -moz-transition: all 800ms cubic-bezier(1, 0, 0, 1);
-     -o-transition: all 800ms cubic-bezier(1, 0, 0, 1);
-     transition: all 800ms cubic-bezier(1, 0, 0, 1);
-     -webkit-transition-timing-function: cubic-bezier(1, 0, 0, 1);
-     -moz-transition-timing-function: cubic-bezier(1, 0, 0, 1);
-     -o-transition-timing-function: cubic-bezier(1, 0, 0, 1);
-     transition-timing-function: cubic-bezier(1, 0, 0, 1);
- }
- .label-radio input[type="radio"]:checked + .lever:before{
-     opacity: 0;
-     background: #eee;
-     border-color: #eee;
-     transform:scale(2);
- }
- .label-radio .lever:after{
-     content:'';
-     opacity: 0;
-     position: absolute;
-     left: 8px;
-     top: 0px;
-     width:8px;
-     height: 16px;
-     border-right: 2px solid #ddd;
-     border-bottom: 2px solid #ddd;
-     transform:rotate(-200deg);
-     -webkit-transition: all 400ms cubic-bezier(1, 0, 0, 1);
-     -moz-transition: all 400ms cubic-bezier(1, 0, 0, 1);
-     -o-transition: all 400ms cubic-bezier(1, 0, 0, 1);
-     transition: all 400ms cubic-bezier(1, 0, 0, 1);
-     -webkit-transition-timing-function: cubic-bezier(1, 0, 0, 1);
-     -moz-transition-timing-function: cubic-bezier(1, 0, 0, 1);
-     -o-transition-timing-function: cubic-bezier(1, 0, 0, 1);
-     transition-timing-function: cubic-bezier(1, 0, 0, 1);
- }
- .label-radio input[type="radio"]:checked + .lever:after{
-     opacity: 1;
-     position: absolute;
-     left: 8px;
-     top: 0px;
-     width:8px;
-     height: 16px;
-     border-right: 2px solid #ee7575;
-     border-bottom: 2px solid #ee7575;
-     transform:rotate(40deg);
+ .radio-group input[type=radio]:checked + label::after{
+   content: "";
+   display: block;
+   position: absolute;
+   top: 5px;
+   left: 5px;
+   width: 7px;
+   height: 7px;
+   background: #ff6e6e;
+   border-radius: 50%;
  }
