@@ -36,7 +36,7 @@ class User extends AppModel
     public function delete($id)
     {
         // IDと一致する行を削除するDELETE文
-        $sql = "DELETE FROM user WHERE facebook_id = ${id}";
+        $sql = "DELETE FROM `user` WHERE `facebook_id` = '$id'";
 
         // 実行結果
         return $this->query($sql);
@@ -50,7 +50,7 @@ class User extends AppModel
      */
     public function get($id)
     {
-        $sql = "SELECT * FROM `user` WHERE `facebook_id` = $id";
+        $sql = "SELECT * FROM `user` WHERE `facebook_id` = '$id'";
         $row = $this->find($sql);
         return $row[0];
     }
