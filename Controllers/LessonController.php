@@ -21,7 +21,7 @@ class LessonController extends AppController
         // 編集して来た時
         $post = $this->getPost();
         if (isset($post['edit'])) {
-            $this->editCommit($id);
+            $this->editCommit($id, $post['data']);
         }
 
         // レッスンとその作成者情報を取得
@@ -239,13 +239,13 @@ class LessonController extends AppController
     /**
      * レッスン編集の確定処理
      *
-     * @param  integer $id 変更されたレッスンのID
+     * @param  integer $id   変更されたレッスンのID
+     * @param  array   $data POSTデータ
      * @return void
      */
-    private function editCommit($id)
+    private function editCommit($id, $data)
     {
-        // レッスンの作成者かを判定
-        $post = $this->getPost();
+        // 作成者か判定
         $model = new Lesson();
         $lesson = $model->get($id);
         if ($lesson['user_id'] != $_SESSION['user_id']) {
@@ -253,12 +253,13 @@ class LessonController extends AppController
             return;
         }
         // エスケープ処理してレッスン更新
-        $post['lesson_name']  = $model->escape($post['lesson_name']);
-        $post['lesson_about'] = $model->escape($post['lesson_about']);
-        $post['lesson_genre'] = intval($post['lesson_genre']);
-        $data = array('name'       => $post['lesson_name'],
-                      'about'      => $post['lesson_about'],
-                      'content_id' => $post['lesson_genre']);
+        $data['name']  = $model->escape($data['name']);
+        $data['about'] = $model->escape($data['about']);
+        // 一旦その他にしておく！！！
+        $data['genre'] = intval($data['genre']) + 999;
+        $data = array('name'       => $data['name'],
+                      'about'      => $data['about'],
+                      'content_id' => $data['genre']);
         $model->update($id, $data);
     }
 }
