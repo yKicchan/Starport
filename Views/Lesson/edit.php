@@ -16,8 +16,8 @@
                 </div>
                 <div class="form-group inline form-padding">
                     <select class="form-control form300" name="lesson_genre">
-                        <?php foreach ($data['genreContent'] as $genre) { ?>
-                            <option name="lessonGenre" value="<?= $genre['id'] ?>" <?= ($genre['id'] == $data['lesson']['content_id']) ? 'selected="ture"' : '' ?>><?= $genre['name'] ?></option>
+                        <?php foreach ($data['category'] as $category) { ?>
+                            <option name="lessonGenre" value="<?= $category['id'] ?>" <?= ($category['id'] == $data['lesson']['content_id']) ? 'selected="ture"' : '' ?>><?= $category['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>

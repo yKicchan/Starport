@@ -23,9 +23,11 @@ $(function(){
                     result.lesson[i].about = htmlspecialchars(result.lesson[i].about);
                     addLesson(result.lesson[i], result.user[i]);
                 }
-                if (i > 0) {
-                    offset += i;
-                } else {
+                while(offset < i){
+                    $(".lesson-about").eq(offset).zipText();
+                    offset++;
+                }
+                if (i == 0) {
                     // 取得できるレッスンがなくなったらもっとボタンを消す
                     $("#more").fadeOut(300);
                 }

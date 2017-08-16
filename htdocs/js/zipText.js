@@ -1,5 +1,4 @@
-$(function() {
-  $('.lesson-about').each(function() {
+$.fn.zipText = function() {
     var $target = $(this);
 
     // オリジナルの文章を取得する
@@ -25,5 +24,4 @@ $(function() {
     // 文章を入れ替えて、複製した要素を削除する
     $target.html($clone.html());
     $clone.remove();
-  });
-});
+}

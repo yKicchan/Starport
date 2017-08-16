@@ -160,7 +160,7 @@ switch ( $data['subject'] ):
 <?php
 endswitch;
 require_once $this->getSysRoot() . $this->getViewDir() . '/header-genres.php'; ?>
-<script src="/js/TextOverFlow.js" charset="utf-8"></script>
+<script src="/js/zipText.js" charset="utf-8"></script>
 <script type="text/javascript">
     var genre = <?= json_encode($data['subject']) ?>;
 </script>

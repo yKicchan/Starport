@@ -10,7 +10,7 @@ class Contact extends AppModel
 {
     /**
      * コンタクト情報を取得する
-     * 
+     *
      * @param  integer $lessonId レッスンID
      * @param  integer $userId   ユーザID
      * @return void
@@ -18,7 +18,7 @@ class Contact extends AppModel
     public function get($lessonId, $userId)
     {
         $sql = "SELECT * FROM `contact` WHERE `lesson_id` = $lessonId AND `user_id` = $userId";
-        $row = $this->query($sql);
+        $row = $this->find($sql);
         return $row[0];
     }
 

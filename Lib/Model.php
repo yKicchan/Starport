@@ -12,7 +12,7 @@ abstract class Model
      *
      * @var Mysqli
      */
-    protected $mysqli;
+    private $mysqli;
 
     /**
      * 表名
@@ -30,7 +30,7 @@ abstract class Model
     {
         // 表名がないときクラス名から表名を設定する
         if ($this->tableName == null) {
-            $this->setTableNameFromClassName();
+            $this->setTableName();
         }
     }
 
@@ -73,7 +73,7 @@ abstract class Model
      *
      * @return void
      */
-    public function setTableNameFromClassName()
+    public function setTableName()
     {
         // クラス名とその文字数を取得
         $className = get_class($this);
@@ -98,12 +98,13 @@ abstract class Model
     }
 
     /**
-     * DB上でクエリを実行するメソッド
+     * SELECT文を実行するメソッド
+     * SELECT文でない時はfalseを返す
      *
-     * @param  string $sql SQL文
-     * @return array       クエリ実行結果
+     * @param  string $sql SELECT文
+     * @return mixed       クエリ実行結果, false
      */
-    public function query($sql)
+    public function find($sql)
     {
         $rows = array();
         if ($result = $this->mysqli->query($sql)) {
@@ -114,14 +115,6 @@ abstract class Model
         }
         return $rows;
     }
-
-    /**
-     * DELETE文を実行するメソッド
-     *
-     * @param  integer $id 行を特定する一意なID
-     * @return boolean     クエリ実行結果
-     */
-    public abstract function delete($id);
 
     /**
      * INSERT文を実行するメソッド
@@ -172,23 +165,29 @@ abstract class Model
             }
         }
         $set = implode(',', $substitution);
-        $sql = "UPDATE `$this->tableName` SET $set WHERE id = $id";
+        $sql = "UPDATE `$this->tableName` SET $set WHERE `id` = $id";
         return $this->mysqli->query($sql);
     }
 
     /**
-     * すべてのレコードを抽出するメソッド
+     * エスケープ処理
      *
-     * @return array 全レコード
+     * @param  string $value エスケープする文字列
+     * @return string        エスケープ後の文字列
      */
-    public function getAll()
-    {
-        $sql = "SELECT * FROM `$this->tableName`";
-        return $this->query($sql);
-    }
-
     public function escape($value)
     {
         return $this->mysqli->real_escape_string($value);
+    }
+
+    /**
+     * クエリ実行
+     *
+     * @param  string $sql SQL文
+     * @return mixed      クエリ実行結果
+     */
+    public function query($sql)
+    {
+        return $this->mysqli->query($sql);
     }
 }
