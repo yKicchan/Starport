@@ -69,15 +69,4 @@ class UserController extends AppController
             header("Location:/system/signout");
         }
     }
-
-    /**
-     * プロフィールの編集内容を確定する
-     *
-     * @param  string $id ユーザーID
-     * @return void
-     */
-    private function editCommit($id)
-    {
-
-    }
 }
