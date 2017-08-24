@@ -17,11 +17,11 @@ $(function(){
         if (item.find('img').hasClass('checked')){
             // 選択された画像を設定
             $("#preview").attr("src", item.find('img').attr("src"));
-            $("input[name=lesson_image]:text").val($("#preview").attr("src"));
+            $('input[name="data[image]"]:text').val($("#preview").attr("src"));
         } else {
             // チェックが外れた時は選択画像の設定を解除
             $("#preview").attr("src", "/images/cover/noimage.svg");
-            $("input[name=lesson_image]:text").val('');
+            $('input[name="data[image]"]:text').val('');
         }
     });
 });
