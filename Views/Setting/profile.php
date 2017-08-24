@@ -1,37 +1,42 @@
 <section><!--プロフィール編集-->
     <div class="width412px">
         <h2>プロフィール編集</h2>
-        <div class="row">
-            <img src="<?= $data['user']['facebook_photo_url'] ?>">
-        </div>
         <form method="post" action="/user/profile/<?= $_SESSION['user_id'] ?>">
-            <!-- エラーメッセージ -->
-            <caption><?=$msg?></caption>
-            <div class="form-group inline">
-                <input type="text" class="form-control form148" name="last_name" placeholder="姓(必須)" value="<?= $data['user']['last_name'] ?>"　required>
+            <div class="form-group">
+                <div class="form-label">氏名<div class="form-required">必須</div></div>
+                <div class="inline">
+                    <input type="text" class="form-control form148" name="data[last_name]" value="<?= $data['user']['last_name'] ?>"　required>
+                </div>
+                <div class="inline">
+                    <input type="text" class="form-control form148" name="data[first_name]" value="<?= $data['user']['first_name'] ?>"　required>
+                </div>
             </div>
-            <div class="form-group inline">
-                <input type="text" class="form-control form148" name="first_name" placeholder="名(必須)" value="<?= $data['user']['first_name'] ?>"　required>
+            <div class="form-group">
+                <div class="form-label">メールアドレス<div class="form-required">必須</div></div>
+                <div class="inline">
+                    <input type="email" class="form-control form300" name="data[email]" placeholder="例) info@starport.com" value="<?= $data['user']['email'] ?>" required>
+                </div>
             </div>
-            <div class="form-group inline">
-                <input type="text" class="form-control form300" name="university" placeholder="大学(必須)" value="<?= $data['user']['university'] ?>" required>
+            <div class="form-group">
+                <div class="form-label">学校名<div class="form-required">必須</div></div>
+                <div class="inline">
+                    <input type="text" class="form-control form300" name="data[university]" placeholder="例) 京都大学" value="<?= $data['user']['university'] ?>" required>
+                </div>
             </div>
-            <div class="form-group inline">
-                <input type="text" class="form-control form148" name="faculty" placeholder="学部(必須)" value="<?= $data['user']['faculty'] ?>"　required>
+            <div class="form-group">
+                <div class="form-label">学部・学科名<div class="form-optional">任意</div></div>
+                <div class="inline">
+                    <input type="text" class="form-control form300" name="data[faculty]" placeholder="例) 工学部" value="<?= $data['user']['faculty'] ?>">
+                </div>
             </div>
-            <div class="form-group inline">
-                <input type="text" class="form-control form148" name="course" placeholder="学科(任意)" value="<?= $data['user']['course'] ?>">
+            <div class="form-group">
+                <div class="form-label">自己紹介文<div class="form-optional">任意</div></div>
+                <div class="inline">
+                    <textarea class="form-control form300" name="data[introduction]" placeholder="例) テニスサークル所属、趣味は筋トレと映画鑑賞です。&#13;&#10;よろしくお願いします!!" ><?= $data['user']['introduction'] ?></textarea>
+                </div>
             </div>
-            <div class="form-group inline">
-                自己紹介文（必須）
-                <textarea class="form-control form300" name="introduction" placeholder="例：テニスサークル○○所属、特技は筋トレ、趣味は映画鑑賞など" required><?= $data['user']['introduction'] ?></textarea>
-            </div>
-            <div class="form-group inline">
-                キャッチフレーズ(30字以内任意)
-                <input type="text" class="form-control form300" name="phrase" placeholder="例：stay foolish, stay hungry." maxlength="30" value="<?= $data['user']['phrase'] ?>">
-            </div>
-            <div class="form-group inline">
-                <button name="edit" type="submit" class="btn btn-default">変更確定</button>
+            <div class="form-group">
+                <button name="submit" type="submit" class="btn btn-success">確定</button>
             </div>
         </form>
 
