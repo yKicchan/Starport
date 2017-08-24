@@ -24,7 +24,7 @@ class User extends AppModel
         }
         $set = implode(',', $substitution);
         $sql = "UPDATE `user` SET $set WHERE `facebook_id` = '$id'";
-        return $this->mysqli->query($sql);
+        return $this->query($sql);
     }
 
     /**
@@ -36,7 +36,7 @@ class User extends AppModel
     public function delete($id)
     {
         // IDと一致する行を削除するDELETE文
-        $sql = "DELETE FROM user WHERE facebook_id = ${id}";
+        $sql = "DELETE FROM `user` WHERE `facebook_id` = '$id'";
 
         // 実行結果
         return $this->query($sql);
@@ -50,8 +50,8 @@ class User extends AppModel
      */
     public function get($id)
     {
-        $sql = "SELECT * FROM `user` WHERE `facebook_id` = $id";
-        $row = $this->query($sql);
+        $sql = "SELECT * FROM `user` WHERE `facebook_id` = '$id'";
+        $row = $this->find($sql);
         return $row[0];
     }
 
@@ -78,17 +78,7 @@ class User extends AppModel
     public function getByLesson($id)
     {
         $sql = "SELECT * FROM `user` WHERE `facebook_id` = (SELECT `user_id` FROM `lesson` WHERE `id` = $id)";
-        $row = $this->query($sql);
+        $row = $this->find($sql);
         return $row[0];
-    }
-
-    /**
-     * ユーザ登録処理をするメソッド
-     *
-     * @param array $info ユーザ情報
-     */
-    public function Register($info)
-    {
-
     }
 }

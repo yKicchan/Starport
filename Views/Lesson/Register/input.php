@@ -1,6 +1,5 @@
-<link rel="stylesheet" href="/css/radio.css">
-<script src="/js/img_list.js" charset="utf-8"></script>
-<script src="/js/img_click.js" charset="utf-8"></script>
+<script src="/js/imgList.js" charset="utf-8"></script>
+<script src="/js/imgClick.js" charset="utf-8"></script>
 <script src="/js/upload.js" charset="utf-8"></script>
 <script src="/js/lessonPreview.js" charset="utf-8"></script>
 <div id="status">
@@ -21,26 +20,21 @@
                 <div class="form-group inline form-padding">
                     <select class="form-control form300" name="lesson_genre">
                         <option name="lessonGenre" value="-1">レッスンのジャンル</option>
-                        <?php foreach ($data['genreContent'] as $genre) { ?>
-                            <option name="lessonGenre" value="<?= $genre['id'] ?>" <?= ($genre['id'] == $_SESSION['lesson_genre']) ? 'selected="ture"' : '' ?>><?= $genre['name'] ?></option>
+                        <?php foreach ($data['category'] as $category) { ?>
+                            <option name="lessonGenre" value="<?= $category['id'] ?>" <?= ($category['id'] == $_SESSION['lesson_genre']) ? 'selected="ture"' : '' ?>><?= $category['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
                 <div class="form-group inline form300 form-padding">
                     <span id="helpBlock" class="help-block left">※レッスンカバー画像（JPEGのみ、最大2MB）</span>
-                    <div class="radio_group">
-                        <label class="label-radio">
-                            <input type="radio" name="cover" value="default" checked="true"/>
-                            <span class="lever">選ぶ</span>
-                        </label>
-                        <label class="label-radio">
-                            <input type="radio" name="cover" value="custom" />
-                            <span class="lever">アップ</span>
-                        </label>
+                    <div class="radio-group">
+                        <input type="radio" name="cover" value="default" checked="true" id="default" />
+                        <label for="default">選択</label>
+                        <input type="radio" name="cover" value="custom" id="custom" />
+                        <label for="custom">アップ</label>
                     </div>
                     <div class="cover_group">
                         <section id="default_cover" class="cover">
-                            <link rel="stylesheet" href="/css/img_list.css">
                             <ul id="img_list">
                                 <?php for ($i = 1; $i <= 24; $i++) { ?>
                                     <li class="img">

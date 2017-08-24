@@ -20,17 +20,4 @@ class AppModel extends Model
         require '../Config/database.php';
         $this->initDb($info);
     }
-
-    /**
-     * DELETE文を実行するメソッド
-     *
-     * @param  integer $id 行を特定する一意なID
-     * @return boolean     クエリ実行結果
-     */
-    public function delete($id)
-    {
-        $sql = "DELETE FROM $this->tableName WHERE id = $id";
-        $row = $this->query($sql);
-        return $row[0];
-    }
 }

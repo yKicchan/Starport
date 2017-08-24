@@ -49,6 +49,18 @@ class UserController extends AppController
     }
 
     /**
+     * 退会
+     * @return void
+     */
+    public function removeAction()
+    {
+        $model = new User();
+        if ($model->delete($_SESSION['user_id'])) {
+            header("Location:/system/signout");
+        }
+    }
+
+    /**
      * プロフィールの編集内容を確定する
      *
      * @param  string $id ユーザーID

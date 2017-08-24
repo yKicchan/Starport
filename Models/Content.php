@@ -8,43 +8,42 @@
  */
 class Content extends AppModel
 {
-    public function delete($id)
+    /**
+     * コンテンツ情報を取得する
+     * @param  integer $id コンテンツID
+     * @return array      コンテンツ情報
+     */
+    public function get($id = 0)
     {
-
-    }
-
-    public function update($id, $date)
-    {
-
-    }
-
-    public function get($id)
-    {
-
-    }
-
-    public function getByGenre($id)
-    {
-        $sql = "SELECT * FROM content WHERE genre_id = $id";
-        return $this->query($sql);
-    }
-
-    public function getAllZipGenreName()
-    {
-        $rows = $this->getAll();
-        $genre = (new Genre)->getAll();
-        foreach ($rows as &$row) {
-            foreach ($genre as $g) {
-                if($row['genre_id'] == $g['id']){
-                    $row['name'] = $g['name'] . '-' . $row['name'];
-                }
-            }
+        $sql = "SELECT * FROM content";
+        if ($id != 0) {
+            $sql .= " WHERE `id` = $id";
         }
-        unset($row);
+        $rows = $this->find($sql);
+        if ($id != 0){
+            return $rows[0];
+        }
         return $rows;
     }
 
-    public function getGenreName($id = 0)
+    /**
+     * ジャンルIDからコンテンツを割り出す
+     *
+     * @param  integer $id ジャンルID
+     * @return array       ジャンルのコンテンツ
+     */
+    public function getByGenre($id)
+    {
+        $sql = "SELECT * FROM content WHERE genre_id = $id";
+        return $this->find($sql);
+    }
+
+    /**
+     * ジャンル名とコンテンツ名を結合した名前を返す
+     *
+     * @return array ジャンル名-コンテンツ名
+     */
+    public function getZipName($id = 0)
     {
         $sql = "SELECT genre.name AS genreName, content.name AS contentName
                 FROM genre, content
@@ -52,14 +51,14 @@ class Content extends AppModel
         if($id != 0){
             $sql .= " AND content.id = $id";
         }
-        $rows = $this->query($sql);
+        $rows = $this->find($sql);
         $names = array();
         foreach ($rows as $row) {
             $names[] = $row['genreName'] . '-' . $row['contentName'];
         }
-        if($id == 0){
-            return $names;
+        if($id != 0){
+            return $names[0];
         }
-        return $names[0];
+        return $names;
     }
 }
