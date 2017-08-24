@@ -9,24 +9,27 @@
             <!-- エラーメッセージ -->
             <?= $data['msg'] ?>
             <form enctype="multipart/form-data" method="POST" action="/lesson/register/complete/">
-                <div class="form-group inline form-padding">
-                    <div class="left">※レッスン名（15文字以内）</div>
-                    <input type="text" class="form-control form300" name="lesson_name" placeholder="例：Starportについて！"　maxlength="15" value="<?= $_SESSION['lesson_name'] ?>" required>
+                <div class="form-group">
+                    <div class="form-label">レッスン名<div class="form-required">必須</div></div>
+                    <div class="inline">
+                        <input class="form-control form300" type="text" name="data[name]" placeholder="例) Starportについて！"　maxlength="15" value="<?= $_SESSION['lesson_name'] ?>" required>
+                    </div>
                 </div>
-                <div class="form-group inline form-padding">
-                    <div class="left">※レッスンの内容、魅力、あなたの実績など</div>
-                    <textarea class="form-control form300" name="lesson_about" required><?= $_SESSION['lesson_about'] ?></textarea>
+                <div class="form-group">
+                    <div class="form-label">レッスン内容<div class="form-required">必須</div></div>
+                    <textarea class="form-control form300" name="data[about]" required><?= $_SESSION['lesson_about'] ?></textarea>
                 </div>
-                <div class="form-group inline form-padding">
-                    <select class="form-control form300" name="lesson_genre">
-                        <option name="lessonGenre" value="-1">レッスンのジャンル</option>
+                <div class="form-group">
+                    <div class="form-label">カテゴリー<div class="form-required">必須</div></div>
+                    <select class="form-control form300" name="data[genre]">
+                        <option name="lessonGenre" value="-1">カテゴリーを選ぶ</option>
                         <?php foreach ($data['category'] as $category) { ?>
                             <option name="lessonGenre" value="<?= $category['id'] ?>" <?= ($category['id'] == $_SESSION['lesson_genre']) ? 'selected="ture"' : '' ?>><?= $category['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
-                <div class="form-group inline form300 form-padding">
-                    <span id="helpBlock" class="help-block left">※レッスンカバー画像（JPEGのみ、最大2MB）</span>
+                <div class="form-group">
+                    <div class="form-label">カバー画像（JPEGのみ、最大2MB)<div class="form-required">必須</div></div>
                     <div class="radio-group">
                         <input type="radio" name="cover" value="default" checked="true" id="default" />
                         <label for="default">選択</label>
@@ -51,7 +54,7 @@
                             </div>
                             <input type="hidden" name="MAX_FILE_SIZE" value="2000000"><!-- 最大2MB -->
                             <input type="file" id="file" accept="image/*" >
-                            <input type="text" name="lesson_image" style="display:none" >
+                            <input type="text" name="data[image]" style="display:none" >
                         </section>
                     </div>
                     <div class="preview">

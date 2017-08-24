@@ -32,7 +32,7 @@ $(function(){
         $("#preview").attr("src", "/images/cover/noimage.svg");
         $("#img_list .checked").removeClass("checked");
         setDropArea('dotted', '#8e8e8e', 'クリックして画像を選択');
-        $("input[name=lesson_image]:text").val('');
+        $('input[name="data[image]"]:text').val('');
     });
 
     /**
@@ -189,7 +189,7 @@ $(function(){
                     success(file.name);
                 },500);
                 console.log(result.fileName);
-                $("input[name=lesson_image]").val(result.fileName);
+                $('input[name="data[image]"]').val(result.fileName);
             },
             // 失敗
             error: function(result){

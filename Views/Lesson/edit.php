@@ -6,16 +6,19 @@
             <form method="POST" action="/lesson/detail/<?= $data['lesson']['id'] ?>/">
                 <!-- エラーメッセージ -->
                 <caption><?= $msg ?></caption>
-                <div class="form-group inline form-padding">
-                    <div class="left">※レッスン名（15文字以内）</div>
-                    <input type="text" class="form-control form300" name="lesson_name" placeholder="例：Starportについて！"　maxlength="15" value="<?= $data['lesson']['name'] ?>" required>
+                <div class="form-group">
+                    <div class="form-label">レッスン名<div class="form-required">必須</div></div>
+                    <div class="inline">
+                        <input class="form-control form300" type="text" name="data[name]" placeholder="例) Starportについて！"　maxlength="15" value="<?= $data['lesson']['name'] ?>" required>
+                    </div>
                 </div>
-                <div class="form-group inline form-padding">
-                    <div class="left">※レッスンの内容、魅力、あなたの実績など</div>
-                    <textarea class="form-control form300" name="lesson_about" required><?= $data['lesson']['about'] ?></textarea>
+                <div class="form-group">
+                    <div class="form-label">レッスン内容<div class="form-required">必須</div></div>
+                    <textarea class="form-control form300" name="data[about]" required><?= $data['lesson']['about'] ?></textarea>
                 </div>
-                <div class="form-group inline form-padding">
-                    <select class="form-control form300" name="lesson_genre">
+                <div class="form-group">
+                    <div class="form-label">カテゴリー<div class="form-required">必須</div></div>
+                    <select class="form-control form300" name="data[genre]">
                         <?php foreach ($data['category'] as $category) { ?>
                             <option name="lessonGenre" value="<?= $category['id'] ?>" <?= ($category['id'] == $data['lesson']['content_id']) ? 'selected="ture"' : '' ?>><?= $category['name'] ?></option>
                         <?php } ?>
@@ -45,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                <button name="edit" type="submit" class="btn btn-default">変更確定</button>
+                <button name="edit" type="submit" class="btn btn-success">変更確定</button>
             </form>
             <style>
                 @media all and (min-width: 412px){

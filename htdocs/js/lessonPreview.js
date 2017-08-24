@@ -4,7 +4,7 @@ $(function(){
      * @param  {Event} e イベントオブジェクト
      * @return {void}
      */
-    $("input[name=lesson_name]:text").keyup(function(e){
+    $('input[name="data[name]"]:text').keyup(function(e){
         $(".profile-text").find(".lesson-name").text($(this).val());
     });
 
@@ -13,7 +13,7 @@ $(function(){
      * @param  {Event} e イベントオブジェクト
      * @return {void}
      */
-    $("textarea[name=lesson_about]").keyup(function(e){
+    $('textarea[name="data[about]"]').keyup(function(e){
         $(".profile-text").find(".lesson-about").text($(this).val());
     });
 });
